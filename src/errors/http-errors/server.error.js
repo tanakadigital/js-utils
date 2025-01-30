@@ -12,15 +12,17 @@ export class ServerError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 500;
+
+        super(
             message,
             cause,
-            httpStatusCode: 500,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'ServerError';
     }
 }

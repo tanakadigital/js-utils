@@ -12,15 +12,17 @@ export class RequestTimeoutError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 408;
+
+        super(
             message,
             cause,
-            httpStatusCode: 408,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'RequestTimeoutError';
     }
 }

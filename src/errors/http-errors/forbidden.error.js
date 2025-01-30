@@ -12,15 +12,17 @@ export class ForbiddenError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 403;
+
+        super(
             message,
             cause,
-            httpStatusCode: 403,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'ForbiddenError';
     }
 }

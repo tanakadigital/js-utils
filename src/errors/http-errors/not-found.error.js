@@ -12,15 +12,17 @@ export class NotFoundError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 404;
+
+        super(
             message,
             cause,
-            httpStatusCode: 404,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'NotFoundError';
     }
 }

@@ -13,15 +13,15 @@ export class RestError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        super(
             message,
             cause,
             httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'RestError';
     }
 }

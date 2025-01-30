@@ -12,15 +12,18 @@ export class BadGatewayError extends CustomError {
         discordWebhookUrl = [],
         enableReportButton = false,
     ) {
-        super({
+
+        const httpStatusCode = 502;
+
+        super(
             message,
             cause,
-            httpStatusCode: 502,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'BadGatewayError';
     }
 }

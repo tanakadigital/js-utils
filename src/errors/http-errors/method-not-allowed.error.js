@@ -12,15 +12,17 @@ export class MethodNotAllowedError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 405;
+
+        super(
             message,
             cause,
-            httpStatusCode: 405,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'MethodNotAllowedError';
     }
 }

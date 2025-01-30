@@ -12,15 +12,17 @@ export class MissingClientFormsError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 422;
+
+        super(
             message,
             cause,
-            httpStatusCode: 422,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'MissingClientFormsError';
     }
 }

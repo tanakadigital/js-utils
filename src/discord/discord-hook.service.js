@@ -1,4 +1,4 @@
-import {FetchService} from './';
+import {FetchService} from './fetch.service.js';
 
 export const DiscordHookService = {
     DiscordColors: {

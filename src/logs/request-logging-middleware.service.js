@@ -1,5 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
-import { DiscordHookService } from '../discord';
+import { DiscordHookService } from '../discord/index.js';
 
 /**
  * Middleware de logging de requests e tratamento de erros.

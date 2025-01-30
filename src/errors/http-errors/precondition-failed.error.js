@@ -12,15 +12,17 @@ export class PreconditionFailedError extends CustomError {
                     discordWebhookUrl = [],
                     enableReportButton = false,
     ) {
-        super({
+        const httpStatusCode = 412;
+
+        super(
             message,
             cause,
-            httpStatusCode: 412,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'PreconditionFailedError';
     }
 }

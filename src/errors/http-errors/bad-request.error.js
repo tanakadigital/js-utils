@@ -1,26 +1,29 @@
-import { CustomError } from './custom.error.js';
+import {CustomError} from './custom.error.js';
 
 /**
  * Erro 400 - Bad Request
  */
 export class BadRequestError extends CustomError {
     constructor(
-                    message = 'Bad request',
-                    cause = null,
-                    userMessage = 'Bad request',
-                    internalMessage = 'Unknown bad request error',
-                    discordWebhookUrl = [],
-                    enableReportButton = false,
+        message = 'Bad request',
+        cause = null,
+        userMessage = 'Bad request',
+        internalMessage = 'Unknown bad request error',
+        discordWebhookUrl = [],
+        enableReportButton = false,
     ) {
-        super({
+
+        const httpStatusCode = 400;
+
+        super(
             message,
             cause,
-            httpStatusCode: 400,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            discordWebhookUrl,
-        });
+            discordWebhookUrl
+        );
         this.name = 'BadRequestError';
     }
 }

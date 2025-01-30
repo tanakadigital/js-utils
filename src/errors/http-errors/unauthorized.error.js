@@ -14,16 +14,17 @@ export class UnauthorizedError extends CustomError {
                     enableReportButton = false,
                     discordWebhookUrl, // pode ser string ou array
     ) {
-        super({
+        const httpStatusCode = 401;
+
+        super(
             message,
             cause,
-            httpStatusCode: 401,
+            httpStatusCode,
             userMessage,
             internalMessage,
             enableReportButton,
-            // se não vier nada, vira array vazio (não notifica)
-            discordWebhookUrl: discordWebhookUrl || [],
-        });
+            discordWebhookUrl
+        );
         this.name = 'UnauthorizedError';
     }
 }
