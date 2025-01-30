@@ -4,7 +4,7 @@ import { CustomError } from './custom.error.js';
  * Erro genérico para REST APIs
  */
 export class RestError extends CustomError {
-    constructor({
+    constructor(
                     message = 'REST API Error',
                     cause = null,
                     httpStatusCode = 400,
@@ -12,7 +12,7 @@ export class RestError extends CustomError {
                     internalMessage = 'Erro genérico de API REST.',
                     discordWebhookUrl = [],
                     enableReportButton = false,
-                } = {}) {
+    ) {
         super({
             message,
             cause,

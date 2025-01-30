@@ -6,14 +6,14 @@ import { CustomError } from './custom.error.js';
  * Se não for passado, não notifica no Discord.
  */
 export class UnauthorizedError extends CustomError {
-    constructor({
+    constructor(
                     message = 'Unauthorized',
                     cause = null,
                     userMessage = 'Unauthorized',
                     internalMessage = 'Unauthorized request',
                     enableReportButton = false,
                     discordWebhookUrl, // pode ser string ou array
-                } = {}) {
+    ) {
         super({
             message,
             cause,

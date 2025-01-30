@@ -4,7 +4,7 @@
  * - Recebe um `discordWebhookUrl` (string ou array) para notificar no Discord (opcional).
  */
 export class CustomError extends Error {
-    constructor({
+    constructor(
                     message = 'Custom error',
                     cause = null,
                     httpStatusCode = 400,
@@ -13,7 +13,7 @@ export class CustomError extends Error {
                     enableReportButton = false,
                     // Pode ser string ou array; se não vier, não notifica no Discord
                     discordWebhookUrl = [],
-                } = {}) {
+    ) {
         super(message);
         this.name = this.constructor.name;
 
