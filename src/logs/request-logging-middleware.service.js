@@ -39,6 +39,11 @@ export const RequestLoggingMiddlewareService = {
         // Monta detalhes do erro
         const discordMessageEmbeds = [
             {
+                title: 'Application Name',
+                description: err.appName || 'No application name',
+                inline: false,
+            },
+            {
                 title: 'err.message',
                 description: err.message || 'No error message',
                 inline: false,

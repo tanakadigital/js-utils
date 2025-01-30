@@ -5,6 +5,7 @@
  */
 export class CustomError extends Error {
     constructor(
+                    appName,
                     message = 'Custom error',
                     cause = null,
                     httpStatusCode = 400,
@@ -17,6 +18,7 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
+        this.appName = appName;
         // Propriedades adicionais
         this.cause = cause;
         this.httpStatusCode = httpStatusCode;
