@@ -5,6 +5,7 @@ import {CustomError} from './custom.error.js';
  */
 export class BadRequestError extends CustomError {
     constructor(
+        appName,
         message = 'Bad request',
         cause = null,
         userMessage = 'Bad request',
@@ -16,6 +17,7 @@ export class BadRequestError extends CustomError {
         const httpStatusCode = 400;
 
         super(
+            appName,
             message,
             cause,
             httpStatusCode,

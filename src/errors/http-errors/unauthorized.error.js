@@ -1,4 +1,4 @@
-import { CustomError } from './custom.error.js';
+import {CustomError} from './custom.error.js';
 
 /**
  * Erro 401 - Unauthorized
@@ -7,16 +7,18 @@ import { CustomError } from './custom.error.js';
  */
 export class UnauthorizedError extends CustomError {
     constructor(
-                    message = 'Unauthorized',
-                    cause = null,
-                    userMessage = 'Unauthorized',
-                    internalMessage = 'Unauthorized request',
-                    enableReportButton = false,
-                    discordWebhookUrl, // pode ser string ou array
+        appName,
+        message = 'Unauthorized',
+        cause = null,
+        userMessage = 'Unauthorized',
+        internalMessage = 'Unauthorized request',
+        enableReportButton = false,
+        discordWebhookUrl, // pode ser string ou array
     ) {
         const httpStatusCode = 401;
 
         super(
+            appName,
             message,
             cause,
             httpStatusCode,
