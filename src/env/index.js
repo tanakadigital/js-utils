@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
-import {ServerError} from '../errors'; // Importando erros adequados
+import {ServerError} from '../errors/index.js';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ async function accessSecret(secretName) {
 }
 
 export const EnvUtils = {
-    async getEnvVariable(variableName, throwsOnEmpty = false) {
+    async getEnvVariable(variableName, throwsOnEmpty = true) {
         if (envCache[variableName]) {
             return envCache[variableName];
         }

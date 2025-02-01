@@ -1,6 +1,6 @@
 {
   "name": "@tanakadigital/js-utils",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "description": "Uma biblioteca utilitária com funções de erros, integração com Discord, logs e helpers genéricos.",
   "type": "module",
   "module": "./src/index.js",
@@ -33,6 +33,7 @@
     "@google-cloud/secret-manager": "^5.6.0",
     "cpf-cnpj-validator": "^1.0.3",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.4.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
