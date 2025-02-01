@@ -1,20 +1,23 @@
 {
   "name": "@tanakadigital/js-utils",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Uma biblioteca utilitária com funções de erros, integração com Discord, logs e helpers genéricos.",
-
   "type": "module",
-  "main": "./src/index.cjs",
   "module": "./src/index.js",
   "exports": {
-    "import": "./src/index.js",
-    "require": "./src/index.cjs"
+    "./errors": "./src/errors/index.js",
+    "./logs": "./src/logs/index.js",
+    "./utils": "./src/utils/index.js",
+    "./env": "./src/env/index.js"
   },
-
   "scripts": {
     "lint": "eslint .",
     "test": "echo \"No test specified\" && exit 0",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major",
+    "prepublish": "npm run lint"
   },
   "keywords": [
     "utils",
@@ -27,6 +30,7 @@
   "author": "Ygor Nogatz",
   "license": "Tanaka Digital",
   "dependencies": {
+    "@google-cloud/secret-manager": "^5.6.0",
     "cpf-cnpj-validator": "^1.0.3",
     "dayjs": "^1.11.7",
     "uuid": "^9.0.1"
