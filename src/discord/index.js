@@ -1,1 +1,1 @@
-export { DiscordHookService } from './discord-hook.service.js';
+export { sendDiscord, discordColors } from './discord-hook.service.js';

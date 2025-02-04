@@ -44,28 +44,26 @@ async function accessSecret(secretName) {
     }
 }
 
-export const EnvUtils = {
-    async getEnvVariable(variableName, throwsOnEmpty = true) {
-        if (envCache[variableName]) {
-            return envCache[variableName];
-        }
-
-        let value;
-        if (process.env.NODE_ENV === 'development') {
-            value = process.env[variableName] || null;
-        } else {
-            value = await accessSecret(variableName);
-        }
-
-        if (value) {
-            envCache[variableName] = value;
-            return value;
-        }
-
-        if (throwsOnEmpty) {
-            throw new ServerError(`Variável de ambiente "${variableName}" não encontrada.`);
-        }
-
-        return null;
+export const getEnvVariable = async (variableName, throwsOnEmpty = true) => {
+    if (envCache[variableName]) {
+        return envCache[variableName];
     }
-};
+
+    let value;
+    if (process.env.NODE_ENV === 'development') {
+        value = process.env[variableName] || null;
+    } else {
+        value = await accessSecret(variableName);
+    }
+
+    if (value) {
+        envCache[variableName] = value;
+        return value;
+    }
+
+    if (throwsOnEmpty) {
+        throw new ServerError(`Variável de ambiente "${variableName}" não encontrada.`);
+    }
+
+    return null;
+}
