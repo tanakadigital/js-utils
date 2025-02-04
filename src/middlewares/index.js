@@ -1,11 +1,4 @@
-import {
-    prepareRequest,
-    errorHandlerMiddleware
-} from './error-handler.middleware.js';
+import * as ErrorHandler from './error-handler.middleware.js';
+import * as FirebaseAuthMiddleware from './firebase-auth.middleware.js';
 
-export const errorHandler = {
-    prepareRequest,
-    errorHandlerMiddleware
-}
-
-export { createFirebaseAuthMiddleware } from './firebase-auth.middleware.js'
+export { ErrorHandler, FirebaseAuthMiddleware };
