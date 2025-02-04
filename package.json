@@ -8,6 +8,7 @@
     "./errors": "./src/errors/index.js",
     "./middlewares": "./src/middlewares/index.js",
     "./utils": "./src/utils/index.js",
+    "./cloud-task": "./src/cloud-task/index.js",
     "./env": "./src/env/index.js"
   },
   "scripts": {
@@ -31,6 +32,7 @@
   "license": "Tanaka Digital",
   "dependencies": {
     "@google-cloud/secret-manager": "^5.6.0",
+    "@google-cloud/tasks": "^5.5.2",
     "@tanakadigital/js-firebase-auth": "^0.0.14",
     "cpf-cnpj-validator": "^1.0.3",
     "dayjs": "^1.11.7",
