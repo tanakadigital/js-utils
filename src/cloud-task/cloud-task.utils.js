@@ -1,5 +1,5 @@
 import { CloudTasksClient } from '@google-cloud/tasks';
-import {BadRequestError} from "../errors/index.js";
+import { BadRequestError } from '../errors/http-errors/bad-request.error.js';
 
 /**
  * Agenda uma tarefa no Google Cloud Tasks.
@@ -32,44 +32,55 @@ import {BadRequestError} from "../errors/index.js";
  * @returns {Promise<object>} Resposta do CloudTasksClient.createTask().
  */
 
-export const scheduleTask = async (task) => {
+export const scheduleTask = async (projectId, queueName, task) => {
     if (!task || typeof task !== 'object') {
-        throw new BadRequestError('O parâmetro "task" é obrigatório e deve ser um objeto.');
+        throw new BadRequestError(
+            'cloud-task',
+            'O parâmetro "task" é obrigatório e deve ser um objeto.'
+        );
     }
-    const { parent, httpRequest, scheduleTime } = task;
-
-    if (!parent || typeof parent !== 'string') {
-        throw new BadRequestError('A propriedade "task.parent" é obrigatória e deve ser uma string.');
-    }
+    const { httpRequest, scheduleTime } = task;
 
     if (!httpRequest || typeof httpRequest !== 'object') {
-        throw new BadRequestError('A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.');
+        throw new BadRequestError(
+            'cloud-task',
+            'A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.'
+        );
     }
     if (!httpRequest.httpMethod) {
-        throw new BadRequestError('httpRequest.httpMethod é obrigatório.');
+        throw new BadRequestError(
+            'cloud-task',
+            'httpRequest.httpMethod é obrigatório.'
+        );
     }
     if (!httpRequest.url) {
-        throw new BadRequestError('httpRequest.url é obrigatório.');
+        throw new BadRequestError(
+            'cloud-task',
+            'httpRequest.url é obrigatório.'
+        );
     }
     if (!httpRequest.headers || typeof httpRequest.headers !== 'object') {
-        throw new BadRequestError('httpRequest.headers é obrigatório e deve ser um objeto.');
+        throw new BadRequestError(
+            'cloud-task',
+            'httpRequest.headers é obrigatório e deve ser um objeto.'
+        );
     }
     if (httpRequest.headers['Content-Type'] !== 'application/json') {
-        throw new BadRequestError('Header "Content-Type" precisa ser "application/json".');
+        throw new BadRequestError(
+            'cloud-task',
+            'Header "Content-Type" precisa ser "application/json".'
+        );
     }
-
-    const taskToSend = {
-        httpRequest: { ...httpRequest },
-    };
 
     if (scheduleTime) {
-        taskToSend.scheduleTime = scheduleTime;
+        task.scheduleTime = scheduleTime;
     }
+    const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
 
     const client = new CloudTasksClient();
     const [response] = await client.createTask({
         parent,
-        task: taskToSend
+        task: task
     });
 
     return response;

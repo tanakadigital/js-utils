@@ -1,4 +1,4 @@
-import {safeFetch} from './fetch.service.js';
+import { safeFetch } from './fetch.service.js';
 
 export const discordColors = {
     red: 0xff0000,

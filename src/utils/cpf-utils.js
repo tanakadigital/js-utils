@@ -1,5 +1,5 @@
 import {cpf} from 'cpf-cnpj-validator';
-import {StringUtils} from './string-utils.js';
+import {onlyNumbers} from "./string-utils.js";
 
 /**
  * Gera um número de CPF válido.
@@ -28,6 +28,6 @@ export const format = (value) => {
     if (!value) {
         return '';
     }
-    value = StringUtils.onlyNumbers(String(value)).padStart(11, '0');
+    value = onlyNumbers(String(value)).padStart(11, '0');
     return cpf.format(value);
 }
