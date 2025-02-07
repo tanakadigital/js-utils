@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class MissingClientFormsError extends CustomError {
     constructor(
-        appName,
         message = 'Missing Client Forms',
         cause = null,
         userMessage = 'Os formulários necessários não foram enviados.',
@@ -16,7 +15,6 @@ export class MissingClientFormsError extends CustomError {
         const httpStatusCode = 422;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

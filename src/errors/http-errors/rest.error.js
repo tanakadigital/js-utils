@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class RestError extends CustomError {
     constructor(
-        appName,
         message = 'REST API Error',
         cause = null,
         httpStatusCode = 400,
@@ -15,7 +14,6 @@ export class RestError extends CustomError {
         enableReportButton = false,
     ) {
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

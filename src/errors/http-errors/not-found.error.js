@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class NotFoundError extends CustomError {
     constructor(
-        appName,
         message = 'Not Found',
         cause = null,
         userMessage = 'O recurso solicitado não foi encontrado.',
@@ -16,7 +15,6 @@ export class NotFoundError extends CustomError {
         const httpStatusCode = 404;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

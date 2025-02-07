@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class PreconditionFailedError extends CustomError {
     constructor(
-        appName,
         message = 'Precondition Failed',
         cause = null,
         userMessage = 'Os pré-requisitos para a requisição não foram atendidos.',
@@ -16,7 +15,6 @@ export class PreconditionFailedError extends CustomError {
         const httpStatusCode = 412;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class ForbiddenError extends CustomError {
     constructor(
-        appName,
         message = 'Forbidden',
         cause = null,
         userMessage = 'Você não tem permissão para acessar este recurso.',
@@ -16,7 +15,6 @@ export class ForbiddenError extends CustomError {
         const httpStatusCode = 403;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

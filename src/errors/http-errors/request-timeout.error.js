@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class RequestTimeoutError extends CustomError {
     constructor(
-        appName,
         message = 'Request Timeout',
         cause = null,
         userMessage = 'O tempo limite da solicitação foi excedido.',
@@ -16,7 +15,6 @@ export class RequestTimeoutError extends CustomError {
         const httpStatusCode = 408;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

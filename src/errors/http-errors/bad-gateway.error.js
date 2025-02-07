@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class BadGatewayError extends CustomError {
     constructor(
-        appName,
         message = 'Bad Gateway',
         cause = null,
         userMessage = 'O servidor recebeu uma resposta inválida.',
@@ -17,7 +16,6 @@ export class BadGatewayError extends CustomError {
         const httpStatusCode = 502;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

@@ -24,7 +24,9 @@ export const discordColors = {
  * @param {string[]} channelUrls - Lista obrigatória de Webhooks do Discord.
  */
 
-export const sendDiscord = async (title, shortDescription, embedFields = [], color = 0x00ff00, channelUrls) => {
+export const sendDiscord = async (title, shortDescription,
+                                  embedFields = [], color = 0x00ff00,
+                                  channelUrls) => {
     if (!Array.isArray(channelUrls) || channelUrls.length === 0) {
         console.warn('DiscordHookService.sendDiscord chamado sem channelUrls. Nenhuma mensagem enviada.');
         return;

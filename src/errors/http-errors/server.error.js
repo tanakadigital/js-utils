@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class ServerError extends CustomError {
     constructor(
-        appName,
         message = 'Internal Server Error',
         cause = null,
         userMessage = 'Ocorreu um erro interno no servidor.',
@@ -16,7 +15,6 @@ export class ServerError extends CustomError {
         const httpStatusCode = 500;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

@@ -5,7 +5,6 @@ import {CustomError} from './custom.error.js';
  */
 export class MethodNotAllowedError extends CustomError {
     constructor(
-        appName,
         message = 'Method Not Allowed',
         cause = null,
         userMessage = 'O método HTTP utilizado não é permitido.',
@@ -16,7 +15,6 @@ export class MethodNotAllowedError extends CustomError {
         const httpStatusCode = 405;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

@@ -7,7 +7,6 @@ import {CustomError} from './custom.error.js';
  */
 export class UnauthorizedError extends CustomError {
     constructor(
-        appName,
         message = 'Unauthorized',
         cause = null,
         userMessage = 'Unauthorized',
@@ -18,7 +17,6 @@ export class UnauthorizedError extends CustomError {
         const httpStatusCode = 401;
 
         super(
-            appName,
             message,
             cause,
             httpStatusCode,

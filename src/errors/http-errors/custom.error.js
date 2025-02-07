@@ -1,3 +1,5 @@
+import {globals} from "../../globals.js";
+
 /**
  * Classe base para erros customizados.
  * - Subclasses podem sobrescrever httpStatusCode, userMessage, etc.
@@ -5,7 +7,6 @@
  */
 export class CustomError extends Error {
     constructor(
-                    appName,
                     message = 'Custom error',
                     cause = null,
                     httpStatusCode = 400,
@@ -18,7 +19,7 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = appName;
+        this.appName = globals.getByName("appName");
         // Propriedades adicionais
         this.cause = cause;
         this.httpStatusCode = httpStatusCode;
