@@ -7,7 +7,6 @@ export const globals = {
     getByName(name) {
         if (!Init.isInitialized) {
             throw new BadRequestError(
-                "init-js-utils",
                 "Bad request",
                 "getGlobalByName",
                 "Bad request",
@@ -18,7 +17,6 @@ export const globals = {
 
         if (!ret) {
             throw new BadRequestError(
-                "init-js-utils",
                 "Bad request",
                 "getGlobalByName",
                 "Bad request",

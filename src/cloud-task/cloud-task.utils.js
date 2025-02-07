@@ -43,31 +43,26 @@ export const scheduleTask = async (projectId, queueName, task) => {
 
     if (!httpRequest || typeof httpRequest !== 'object') {
         throw new BadRequestError(
-            'cloud-task',
             'A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.'
         );
     }
     if (!httpRequest.httpMethod) {
         throw new BadRequestError(
-            'cloud-task',
             'httpRequest.httpMethod é obrigatório.'
         );
     }
     if (!httpRequest.url) {
         throw new BadRequestError(
-            'cloud-task',
             'httpRequest.url é obrigatório.'
         );
     }
     if (!httpRequest.headers || typeof httpRequest.headers !== 'object') {
         throw new BadRequestError(
-            'cloud-task',
             'httpRequest.headers é obrigatório e deve ser um objeto.'
         );
     }
     if (httpRequest.headers['Content-Type'] !== 'application/json') {
         throw new BadRequestError(
-            'cloud-task',
             'Header "Content-Type" precisa ser "application/json".'
         );
     }
