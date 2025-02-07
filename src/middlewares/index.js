@@ -1,3 +1,7 @@
-import * as ErrorHandler from './error-handler.middleware.js';
+export {
+    prepareRequest
+} from "./prepare-request.middleware.js"
 
-export {ErrorHandler}
+export {
+    errorHandler,
+} from "./error-handler.middleware.js"

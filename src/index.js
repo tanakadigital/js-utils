@@ -5,4 +5,4 @@ export * from './utils/index.js';
 export * from './env/index.js';
 export * from './cloud-task/index.js';
 
-export * from './globals.js';
+export * from './globals/index.js';
