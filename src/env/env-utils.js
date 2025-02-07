@@ -8,8 +8,11 @@ import {ServerError} from '../errors/index.js';
 const secretManagerClient = new SecretManagerServiceClient();
 const envCache = {};
 
+dotenv.config();
+
 export const envUtils = {
     async getEnvVariable(variableName, throwsOnEmpty = true) {
+
         if (envCache[variableName]) {
             return envCache[variableName];
         }
@@ -35,8 +38,6 @@ export const envUtils = {
 }
 
 const accessSecret = async (secretName) => {
-    dotenv.config();
-
     const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
     if (!credentialsPath) {
         throw new ServerError('GOOGLE_APPLICATION_CREDENTIALS não está definido.');
