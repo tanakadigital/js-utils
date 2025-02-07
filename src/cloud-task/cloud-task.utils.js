@@ -1,5 +1,5 @@
 import { CloudTasksClient } from '@google-cloud/tasks';
-import { BadRequestError } from '../errors/http-errors/bad-request.error.js';
+import { BadRequestError } from '../errors/index.js';
 
 /**
  * Agenda uma tarefa no Google Cloud Tasks.
