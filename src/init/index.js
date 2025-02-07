@@ -1,4 +1,4 @@
-import {globals} from "../globals.js";
+import {globals} from "../globals/index.js";
 
 export const Init = {
     isInitialized: false,

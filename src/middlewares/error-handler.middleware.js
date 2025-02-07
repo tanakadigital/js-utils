@@ -1,5 +1,5 @@
-import {v4 as uuidV4} from 'uuid';
-import {sendDiscord, discordColors} from '../discord/index.js';
+import {discordColors, sendDiscord} from '../discord/index.js';
+import {StringUtils} from "../utils/index.js";
 
 /**
  * Gera um traceUuid para cada requisição e anexa no objeto req.
@@ -8,7 +8,7 @@ export const prepareRequest = async (req, res, next) => {
     if (!req) return;
 
     if (!req.traceUuid) {
-        req.traceUuid = uuidV4();
+        req.traceUuid = StringUtils.randomUUID();
         req.requestReceivedAt = new Date();
     }
 
@@ -23,7 +23,7 @@ export const errorHandlerMiddleware = async (err, req, res, next) => {
     if (!req) return next();
 
     req.errorHandlingError = err;
-    const traceId = req.traceUuid || uuidV4();
+    const traceId = req.traceUuid || StringUtils.randomUUID();
 
     const title = 'Error in RequestLoggingMiddlewareService.errorHandlerMiddleware';
     const description = `
