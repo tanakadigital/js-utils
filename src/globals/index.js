@@ -1,5 +1,5 @@
-import {BadRequestError} from "./errors/index.js";
-import {Init} from "./init/index.js";
+import {Init} from "../init/index.js";
+import {BadRequestError} from "../errors/index.js";
 
 export const globals = {
     values: {},

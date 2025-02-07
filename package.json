@@ -1,6 +1,6 @@
 {
   "name": "@tanakadigital/js-utils",
-  "version": "0.0.26",
+  "version": "0.0.28",
   "description": "Uma biblioteca utilitária com funções de erros, integração com Discord, logs e helpers genéricos.",
   "type": "module",
   "module": "./src/index.js",
@@ -10,7 +10,8 @@
     "./middlewares": "./src/middlewares/index.js",
     "./utils": "./src/utils/index.js",
     "./cloud-task": "./src/cloud-task/index.js",
-    "./env": "./src/env/index.js"
+    "./env": "./src/env/index.js",
+    "./globals": "./src/globals/index.js"
   },
   "scripts": {
     "lint": "eslint .",
