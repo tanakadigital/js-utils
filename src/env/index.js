@@ -1,5 +1,5 @@
-import {getEnvVariable} from "./env-utils.js";
+import {e} from "./env-utils.js";
 
 export {
-    getEnvVariable
+
 }

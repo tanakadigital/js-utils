@@ -1,4 +1,5 @@
 import {globals} from "../../globals/index.js";
+import {Init} from "../../init/index.js";
 
 /**
  * Classe base para erros customizados.
@@ -19,7 +20,7 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = globals.getByName("appName")
+        this.appName = Init.isInitialized ? globals.getByName("appName") : "custom-error";
         // Propriedades adicionais
         this.cause = cause;
         this.httpStatusCode = httpStatusCode;
