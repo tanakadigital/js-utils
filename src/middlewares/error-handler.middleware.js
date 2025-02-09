@@ -1,5 +1,6 @@
-import {discordColors, sendDiscord} from '../discord/index.js';
+import {dicordService} from '../discord/index.js';
 import {StringUtils} from "../utils/index.js";
+import {discordColors} from "../discord/discord-hook.service.js";
 
 export const errorHandler = {
     async middleware(err, req, res, next) {
@@ -75,7 +76,7 @@ export const errorHandler = {
         // Notifica no Discord APENAS se houver URLs
         if (channelUrls.length > 0) {
             try {
-                await sendDiscord(
+                await dicordService.sendDiscord(
                     title,
                     description,
                     discordMessageEmbeds,

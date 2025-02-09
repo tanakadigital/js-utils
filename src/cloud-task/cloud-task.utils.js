@@ -1,5 +1,6 @@
-import { CloudTasksClient } from '@google-cloud/tasks';
-import { BadRequestError } from '../errors/index.js';
+import {CloudTasksClient} from '@google-cloud/tasks';
+import {BadRequestError} from '../errors/index.js';
+import {globals} from "../globals/index.js";
 
 /**
  * Agenda uma tarefa no Google Cloud Tasks.
@@ -19,7 +20,7 @@ import { BadRequestError } from '../errors/index.js';
  *       seconds: Math.floor(Date.now() / 1000) + 60
  *     }
  *   });
- *
+ * @param {string} queueName - nome da fila no cloudtask.
  * @param {object} task - Objeto que deve conter os dados necessários para a tarefa.
  *   @property {string} task.parent - Caminho de projeto/fila, ex.: "projects/xxx/locations/xxx/queues/xxx".
  *   @property {object} task.httpRequest - Informações da requisição HTTP.
@@ -32,14 +33,14 @@ import { BadRequestError } from '../errors/index.js';
  * @returns {Promise<object>} Resposta do CloudTasksClient.createTask().
  */
 
-export const scheduleTask = async (projectId, queueName, task) => {
+export const scheduleTask = async (queueName, task) => {
     if (!task || typeof task !== 'object') {
         throw new BadRequestError(
             'cloud-task',
             'O parâmetro "task" é obrigatório e deve ser um objeto.'
         );
     }
-    const { httpRequest, scheduleTime } = task;
+    const {httpRequest, scheduleTime} = task;
 
     if (!httpRequest || typeof httpRequest !== 'object') {
         throw new BadRequestError(
@@ -70,6 +71,7 @@ export const scheduleTask = async (projectId, queueName, task) => {
     if (scheduleTime) {
         task.scheduleTime = scheduleTime;
     }
+    const projectId = globals.getByName("projectId")
     const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
 
     const client = new CloudTasksClient();
