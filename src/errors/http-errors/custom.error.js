@@ -14,6 +14,7 @@ export class CustomError extends Error {
         userMessage = 'Error',
         internalMessage = 'Unknown error',
         enableReportButton = false,
+        ignoreSystemEvent = false,
         // Pode ser string ou array; se não vier, não notifica no Discord
         discordWebhookUrl = [],
     ) {

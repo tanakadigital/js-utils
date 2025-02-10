@@ -19,7 +19,7 @@
    pgsql
    Copiar
    js-utils/
-   ├── .eslintrc.js
+   ├── .eslintrc.cjs
    ├── index.js
    ├── package.json
    ├── README.md
@@ -70,7 +70,7 @@
 
 4. Detalhamento dos Módulos e Arquivos
    4.1 Arquivos Raiz
-   .eslintrc.js
+   .eslintrc.cjs
    Local: Raiz
    Descrição: Configuração do ESLint para o projeto (Node.js, ES2022).
    Exemplo de Conteúdo:
@@ -318,7 +318,7 @@ throw new BadRequestError('Erro durante o processamento.', err);
 
 6. Contribuição e Fluxo de Trabalho
    Linting:
-   Utilize o comando npm run lint para garantir que o código esteja conforme as regras definidas no .eslintrc.js.
+   Utilize o comando npm run lint para garantir que o código esteja conforme as regras definidas no .eslintrc.cjs.
    Versionamento:
    Utilize os scripts patch, minor ou major (ex.: npm run patch) para atualizar a versão da lib conforme as alterações realizadas.
    Publicação:

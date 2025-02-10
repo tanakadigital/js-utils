@@ -25,5 +25,37 @@ export const globals = {
         }
 
         return ret;
+    },
+
+
+    setByName(name, value) {
+        if (!Init.isInitialized) {
+            throw new CustomError(
+                "Bad request",
+                "setGlobalByName",
+                400,
+                "Js Utils is not initialized"
+            )
+        }
+
+        if (!name) {
+            throw new CustomError(
+                "Bad request",
+                "setGlobalByName",
+                400,
+                "Variable name is required"
+            )
+        }
+
+        if (!value) {
+            throw new CustomError(
+                "Bad request",
+                "setGlobalByName",
+                400,
+                "Variable value is required"
+            )
+        }
+
+        this.values[name] = value;
     }
 }
