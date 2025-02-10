@@ -1,4 +1,5 @@
 import {globals} from "../globals/index.js";
+
 export const Init = {
     isInitialized: false,
     inititalizeJsUtils(appName, admin, projectId) {
@@ -6,6 +7,7 @@ export const Init = {
             globals.values.appName = appName;
             globals.values.projectId = projectId;
             globals.values.admin = admin;
+
             this.isInitialized = true;
         }
     },
