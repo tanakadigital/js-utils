@@ -38,8 +38,7 @@ export const systemEventMiddleware = {
                         req.event.eventDescription,
                         req.event.eventContent,
                         req.errorHandlingError,
-                        appName,
-                        ignoreErrorSystemEvents
+                        appName
                     );
                 }
             });
