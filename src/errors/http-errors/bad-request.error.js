@@ -9,8 +9,9 @@ export class BadRequestError extends CustomError {
         cause = null,
         userMessage = 'Bad request',
         internalMessage = 'Unknown bad request error',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
 
         const httpStatusCode = 400;
@@ -22,6 +23,7 @@ export class BadRequestError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'BadRequestError';

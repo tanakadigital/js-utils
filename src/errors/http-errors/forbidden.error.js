@@ -9,8 +9,9 @@ export class ForbiddenError extends CustomError {
         cause = null,
         userMessage = 'Você não tem permissão para acessar este recurso.',
         internalMessage = 'Tentativa de acesso a um recurso sem autorização.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 403;
 
@@ -21,6 +22,7 @@ export class ForbiddenError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'ForbiddenError';

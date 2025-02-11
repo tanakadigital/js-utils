@@ -9,8 +9,9 @@ export class RequestTimeoutError extends CustomError {
         cause = null,
         userMessage = 'O tempo limite da solicitação foi excedido.',
         internalMessage = 'A requisição demorou mais do que o permitido.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 408;
 
@@ -21,6 +22,7 @@ export class RequestTimeoutError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'RequestTimeoutError';

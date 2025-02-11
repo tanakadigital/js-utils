@@ -9,8 +9,9 @@ export class BadGatewayError extends CustomError {
         cause = null,
         userMessage = 'O servidor recebeu uma resposta inválida.',
         internalMessage = 'Erro ao tentar processar a resposta do servidor.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
 
         const httpStatusCode = 502;
@@ -22,6 +23,7 @@ export class BadGatewayError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'BadGatewayError';

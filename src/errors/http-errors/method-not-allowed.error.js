@@ -9,8 +9,9 @@ export class MethodNotAllowedError extends CustomError {
         cause = null,
         userMessage = 'O método HTTP utilizado não é permitido.',
         internalMessage = 'Método HTTP não suportado para o endpoint.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 405;
 
@@ -21,6 +22,7 @@ export class MethodNotAllowedError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'MethodNotAllowedError';

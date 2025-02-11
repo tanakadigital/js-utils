@@ -9,8 +9,9 @@ export class PreconditionFailedError extends CustomError {
         cause = null,
         userMessage = 'Os pré-requisitos para a requisição não foram atendidos.',
         internalMessage = 'Falha nas pré-condições da solicitação.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 412;
 
@@ -21,6 +22,7 @@ export class PreconditionFailedError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'PreconditionFailedError';

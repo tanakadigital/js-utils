@@ -9,8 +9,9 @@ export class ServerError extends CustomError {
         cause = null,
         userMessage = 'Ocorreu um erro interno no servidor.',
         internalMessage = 'Erro inesperado durante o processamento da requisição.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 500;
 
@@ -21,6 +22,7 @@ export class ServerError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'ServerError';

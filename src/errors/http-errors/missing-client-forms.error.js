@@ -9,8 +9,9 @@ export class MissingClientFormsError extends CustomError {
         cause = null,
         userMessage = 'Os formulários necessários não foram enviados.',
         internalMessage = 'Dados do cliente incompletos ou ausentes.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 422;
 
@@ -21,6 +22,7 @@ export class MissingClientFormsError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'MissingClientFormsError';

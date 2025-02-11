@@ -9,8 +9,9 @@ export class NotFoundError extends CustomError {
         cause = null,
         userMessage = 'O recurso solicitado não foi encontrado.',
         internalMessage = 'Tentativa de acessar um recurso inexistente.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         const httpStatusCode = 404;
 
@@ -21,6 +22,7 @@ export class NotFoundError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'NotFoundError';

@@ -10,8 +10,9 @@ export class RestError extends CustomError {
         httpStatusCode = 400,
         userMessage = 'Ocorreu um erro ao processar a requisição.',
         internalMessage = 'Erro genérico de API REST.',
-        discordWebhookUrl = [],
         enableReportButton = false,
+        ignoreSystemEvent = false,
+        discordWebhookUrl = [],
     ) {
         super(
             message,
@@ -20,6 +21,7 @@ export class RestError extends CustomError {
             userMessage,
             internalMessage,
             enableReportButton,
+            ignoreSystemEvent,
             discordWebhookUrl
         );
         this.name = 'RestError';
