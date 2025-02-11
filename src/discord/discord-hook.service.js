@@ -14,7 +14,7 @@ export const discordColors = {
     pink: 0xffc0cb,
     neon: 0x00ff00,
 }
-export const dicordService = {
+export const discordService = {
 
     /**
      * Envia uma mensagem para um ou mais canais Discord via webhook.
