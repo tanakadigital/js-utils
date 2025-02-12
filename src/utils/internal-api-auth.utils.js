@@ -12,7 +12,7 @@ export const internalApiAuthUtils = {
 
         const apisKeysCollection = globals.getByName("apisKeysCollection");
 
-        const foundedApiKey = await apisKeysCollection.find(
+        const foundedApiKeys = await apisKeysCollection.find(
             {
                 appName: appName
             },
@@ -22,6 +22,8 @@ export const internalApiAuthUtils = {
             .sort({expiresAt: -1})
             .limit(1)
             .toArray();
+
+        const [foundedApiKey] = foundedApiKeys;
 
 
         if (!foundedApiKey?.appName?.length) {

@@ -2,9 +2,7 @@ import {stringUtils} from "../utils/index.js";
 import {globals} from "../globals/index.js"; // Ajuste o caminho conforme necessário
 
 export const systemEventMiddleware = {
-    middleware(asyncScheduleEventProcessorTask) {
-        globals.setByName('asyncScheduleEventProcessorTask', asyncScheduleEventProcessorTask);
-
+    middleware() {
         return async (req, res, next) => {
             req.event = {
                 eventName: 'event-name-missing',

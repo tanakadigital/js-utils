@@ -7,7 +7,8 @@ export const Init = {
         admin,
         projectId,
         mongoClient,
-        applicationDatabaseName
+        applicationDatabaseName,
+        asyncScheduleEventProcessorTask
     ) {
         if (!this.isInitialized) {
 
@@ -19,6 +20,8 @@ export const Init = {
 
             globals.values.apisKeysCollection = globals.values.mongoClientDatabase.collection("apisKeys");
             globals.values.apisRegistryCollection = globals.values.mongoClientDatabase.collection("apisRegistry");
+
+            globals.values.asyncScheduleEventProcessorTask = asyncScheduleEventProcessorTask;
 
             this.isInitialized = true;
         }

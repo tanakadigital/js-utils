@@ -22,8 +22,8 @@ export const internalApiRequestMiddleware = {
                 );
             }
 
-            const apisKeysCollection = globals.getByName("apisKeysCollection");
-            const apisRegistryCollection = globals.getByName("apisRegistryCollection");
+            const apisKeysCollection = globals.values.apisKeysCollection;
+            const apisRegistryCollection = globals.values.apisRegistryCollection;
 
             const apiRegistry = await apisRegistryCollection.findOne({
                 appName: appName,
@@ -93,7 +93,5 @@ export const internalApiRequestMiddleware = {
         } catch (e) {
             next(e);
         }
-
     }
-
 };
