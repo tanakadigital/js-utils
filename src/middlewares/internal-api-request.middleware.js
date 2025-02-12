@@ -53,7 +53,7 @@ export const internalApiRequestMiddleware = {
 
         const now = new Date();
 
-        if (!foundedApiKey?.expiresAt || foundedApiKey.expiresAt.getTime() > now.getTime()) {
+        if (!foundedApiKey?.expiresAt || foundedApiKey.expiresAt.getTime() < now.getTime()) {
             throw new UnauthorizedError(
                 "Api key esta expirada !!!",
                 "Api key esta expirada !!!",
