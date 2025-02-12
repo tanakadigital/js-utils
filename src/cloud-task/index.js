@@ -1,1 +1,1 @@
-export { scheduleTask } from './cloud-task.utils.js';
+export { cloudTaskUtils } from './cloud-task.utils.js';
