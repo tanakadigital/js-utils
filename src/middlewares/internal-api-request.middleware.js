@@ -10,12 +10,19 @@ export const internalApiRequestMiddleware = {
         if (!req) return;
 
         const appName = globals.getByName("appName");
+        const xApiKey = req.headers["x-api-key"];
 
         const apisKeysCollection = globals.getByName("apisKeysCollection");
         const apisRegistryCollection = globals.getByName("apisRegistryCollection");
 
         const apiRegistry = await apisRegistryCollection.findOne({
-            appName: appName
+            appName: appName,
+        }, {
+            proejction: {
+                _id: 0,
+                appName: 1,
+                isActive: 1,
+            }
         })
 
         if (!apiRegistry?.appName?.length) {
@@ -39,6 +46,7 @@ export const internalApiRequestMiddleware = {
 
         const foundedApiKey = await apisKeysCollection.findOne({
             appName: appName,
+            apiKey: xApiKey,
         })
 
 
@@ -51,8 +59,18 @@ export const internalApiRequestMiddleware = {
             )
         }
 
-        const now = new Date();
 
+        if (!foundedApiKey?.apiKey?.length) {
+            throw new UnauthorizedError(
+                "Api key invalid",
+                "Api key invalid",
+                "Api key invalid",
+                "Api key invalid",
+            )
+        }
+
+
+        const now = new Date();
         if (!foundedApiKey?.expiresAt || foundedApiKey.expiresAt.getTime() < now.getTime()) {
             throw new UnauthorizedError(
                 "Api key esta expirada !!!",

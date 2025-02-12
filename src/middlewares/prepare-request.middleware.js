@@ -1,4 +1,4 @@
-import {StringUtils} from "../utils/index.js";
+import {stringUtils} from "../utils/index.js";
 import {Init} from "../init/index.js";
 import {globals} from "../globals/index.js";
 
@@ -11,7 +11,7 @@ export const prepareRequest = {
         if (!req) return;
 
         if (!req.traceUuid) {
-            req.traceUuid = StringUtils.randomUUID();
+            req.traceUuid = stringUtils.randomUUID();
             req.requestReceivedAt = new Date();
         }
 

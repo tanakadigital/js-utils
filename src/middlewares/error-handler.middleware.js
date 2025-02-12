@@ -1,5 +1,5 @@
 import {discordService} from '../discord/index.js';
-import {StringUtils} from "../utils/index.js";
+import {stringUtils} from "../utils/index.js";
 import {discordColors} from "../discord/discord-hook.service.js";
 
 export const errorHandler = {
@@ -7,7 +7,7 @@ export const errorHandler = {
         if (!req) return next();
 
         req.errorHandlingError = err;
-        const traceId = req.traceUuid || StringUtils.randomUUID();
+        const traceId = req.traceUuid || stringUtils.randomUUID();
 
         const title = 'Error in RequestLoggingMiddlewareService.errorHandlerMiddleware';
         const description = `
