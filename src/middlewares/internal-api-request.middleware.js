@@ -9,7 +9,7 @@ export const internalApiRequestMiddleware = {
     async middleware(req, res, next) {
         if (!req) return;
 
-        const appName = globals.getByName("appName");
+        const appName = req.appName;
         const xApiKey = req.headers["x-api-key"];
 
         const apisKeysCollection = globals.getByName("apisKeysCollection");
