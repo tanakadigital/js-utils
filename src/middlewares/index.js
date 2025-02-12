@@ -6,7 +6,6 @@ export {
     errorHandler,
 } from "./error-handler.middleware.js"
 
-
 export {
     systemEventMiddleware
 } from "./system-event.middleware.js"
