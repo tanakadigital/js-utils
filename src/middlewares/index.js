@@ -10,3 +10,7 @@ export {
 export {
     systemEventMiddleware
 } from "./system-event.middleware.js"
+
+export {
+    internalApiRequestMiddleware
+} from "./internal-api-request.middleware.js"
