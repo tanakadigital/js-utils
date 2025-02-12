@@ -9,8 +9,17 @@ export const internalApiRequestMiddleware = {
     async middleware(req, res, next) {
         if (!req) return;
 
-        const appName = req.appName;
+        const appName = req.headers["x-app-name"];
         const xApiKey = req.headers["x-api-key"];
+
+        if (!appName || !xApiKey) {
+            throw new UnauthorizedError(
+                "Headers inválidos",
+                "Headers inválidos",
+                "Headers inválidos",
+                "Headers inválidos",
+            );
+        }
 
         const apisKeysCollection = globals.getByName("apisKeysCollection");
         const apisRegistryCollection = globals.getByName("apisRegistryCollection");
