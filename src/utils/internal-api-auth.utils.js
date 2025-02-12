@@ -4,10 +4,10 @@ import {UnauthorizedError} from "../errors/index.js";
 export const internalApiAuthUtils = {
     /**
      * Verifica se a requisição é interna.
-     * @param {Request} req
-     * @returns {boolean}
+     * @param {RequestInit} optionsFetch
+     * @returns {Promise<string[][]>}
      */
-    async getXApiKeyFromAppName(req) {
+    async getHeaders(optionsFetch) {
         const appName = globals.getByName("appName");
 
         const apisKeysCollection = globals.getByName("apisKeysCollection");
@@ -54,6 +54,7 @@ export const internalApiAuthUtils = {
             );
         }
 
-        req.headers["x-api-key"] = foundedApiKey.apiKey;
+        optionsFetch.headers['x-app-name'] = appName;
+        optionsFetch.headers['x-api-key'] = foundedApiKey.apiKey;
     }
 };

@@ -1,3 +1,5 @@
+import {internalApiAuthUtils} from "../utils/internal-api-auth.utils.js";
+
 export const fetchService = {
 
     /**
@@ -25,5 +27,20 @@ export const fetchService = {
         }
 
         return responseData;
+    },
+
+
+    /**
+     * Realiza uma requisição HTTP com tratamento de erros.
+     * @param {Request} req - URL da requisição.
+     * @param {string} url - URL da requisição.
+     * @param {RequestInit} options - Configuração da requisição.
+     * @returns {Promise<Object>} - Retorna um objeto com os metadados da requisição.
+     */
+    async sendInternalApiFetch(url, options) {
+
+        await internalApiAuthUtils.getHeaders(options);
+
+        return await this.safeFetch(url, options);
     }
 };
