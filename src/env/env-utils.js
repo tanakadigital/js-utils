@@ -1,8 +1,10 @@
 // src/env-utils/index.js
 import fs from 'fs';
 import path from 'path';
+
 import dotenv from 'dotenv';
 import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
+
 import {ServerError} from '../errors/index.js';
 
 const secretManagerClient = new SecretManagerServiceClient();
@@ -35,7 +37,7 @@ export const envUtils = {
 
         return null;
     }
-}
+};
 
 const accessSecret = async (secretName) => {
     const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
@@ -69,4 +71,4 @@ const accessSecret = async (secretName) => {
         console.error(`Erro ao buscar o segredo "${secretName}":`, error);
         return null;
     }
-}
+};

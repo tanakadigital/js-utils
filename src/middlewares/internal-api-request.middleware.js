@@ -18,12 +18,12 @@ export const internalApiRequestMiddleware = {
         const apiRegistry = await apisRegistryCollection.findOne({
             appName: appName,
         }, {
-            proejction: {
+            projection: {
                 _id: 0,
                 appName: 1,
                 isActive: 1,
             }
-        })
+        });
 
         if (!apiRegistry?.appName?.length) {
             throw new UnauthorizedError(
@@ -32,7 +32,7 @@ export const internalApiRequestMiddleware = {
                 "Api nao esta registrada",
                 "Api nao esta registrada",
                 false
-            )
+            );
         }
 
         if (!apiRegistry?.isActive) {
@@ -41,13 +41,13 @@ export const internalApiRequestMiddleware = {
                 "Api nao esta ativa!",
                 "Api nao esta ativa!",
                 "Api nao esta ativa!",
-            )
+            );
         }
 
         const foundedApiKey = await apisKeysCollection.findOne({
             appName: appName,
             apiKey: xApiKey,
-        })
+        });
 
 
         if (!foundedApiKey?.appName?.length) {
@@ -56,7 +56,7 @@ export const internalApiRequestMiddleware = {
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
-            )
+            );
         }
 
 
@@ -66,7 +66,7 @@ export const internalApiRequestMiddleware = {
                 "Api key invalid",
                 "Api key invalid",
                 "Api key invalid",
-            )
+            );
         }
 
 
@@ -77,10 +77,10 @@ export const internalApiRequestMiddleware = {
                 "Api key esta expirada !!!",
                 "Api key esta expirada !!!",
                 "Api key esta expirada !!!",
-            )
+            );
         }
 
         next();
     }
 
-}
+};

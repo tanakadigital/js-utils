@@ -13,7 +13,7 @@ export const discordColors = {
     white: 0xffffff,
     pink: 0xffc0cb,
     neon: 0x00ff00,
-}
+};
 export const discordService = {
 
     /**
@@ -56,7 +56,7 @@ export const discordService = {
 
         if (Array.isArray(embedFields) && embedFields.length > 0) {
             embedFields.forEach((fieldItem) => {
-                let inline = !!fieldItem.inline;
+                const inline = !!fieldItem.inline;
                 let fieldTitle = fieldItem.title || '';
                 if (fieldTitle.length > 256) {
                     fieldTitle = fieldTitle.substring(0, 252) + '...';
@@ -90,4 +90,4 @@ export const discordService = {
             }
         }
     }
-}
+};

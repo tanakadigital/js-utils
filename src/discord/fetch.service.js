@@ -26,4 +26,4 @@ export const fetchService = {
 
         return responseData;
     }
-}
+};

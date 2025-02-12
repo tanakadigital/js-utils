@@ -11,7 +11,7 @@ export const globals = {
                 "getGlobalByName",
                 400,
                 "Js Utils is not initialized"
-            )
+            );
         }
         const ret = this.values[name];
 
@@ -21,7 +21,7 @@ export const globals = {
                 "getGlobalByName",
                 400,
                 "Variable " + name + " is not defined"
-            )
+            );
         }
 
         return ret;
@@ -35,7 +35,7 @@ export const globals = {
                 "setGlobalByName",
                 400,
                 "Js Utils is not initialized"
-            )
+            );
         }
 
         if (!name) {
@@ -44,7 +44,7 @@ export const globals = {
                 "setGlobalByName",
                 400,
                 "Variable name is required"
-            )
+            );
         }
 
         if (!value) {
@@ -53,9 +53,9 @@ export const globals = {
                 "setGlobalByName",
                 400,
                 "Variable value is required"
-            )
+            );
         }
 
         this.values[name] = value;
     }
-}
+};

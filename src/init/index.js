@@ -15,7 +15,7 @@ export const Init = {
             globals.values.projectId = projectId;
             globals.values.admin = admin;
 
-            globals.values.mongoClientDatabase = mongoClient.db(applicationDatabaseName)
+            globals.values.mongoClientDatabase = mongoClient.db(applicationDatabaseName);
 
             globals.values.apisKeysCollection = globals.values.mongoClientDatabase.collection("apisKeys");
             globals.values.apisRegistryCollection = globals.values.mongoClientDatabase.collection("apisRegistry");
@@ -23,4 +23,4 @@ export const Init = {
             this.isInitialized = true;
         }
     },
-}
+};

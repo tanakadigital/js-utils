@@ -6,4 +6,4 @@ import * as cpfUtils from './cpf-utils.js';
 import * as internalApiAuthUtils from './internal-api-auth.utils.js';
 
 
-export { stringUtils, maskUtils, dateUtils, numberUtils, cpfUtils,  internalApiAuthUtils};
+export {stringUtils, maskUtils, dateUtils, numberUtils, cpfUtils, internalApiAuthUtils};

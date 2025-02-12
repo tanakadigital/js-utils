@@ -30,7 +30,7 @@ export const internalApiAuthUtils = {
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
-            )
+            );
         }
 
         if (!foundedApiKey?.apiKey?.length) {
@@ -39,7 +39,7 @@ export const internalApiAuthUtils = {
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
                 "Api nao possui api-key ERRO CRITICO!!",
-            )
+            );
 
         }
 
@@ -51,9 +51,9 @@ export const internalApiAuthUtils = {
                 "Api key esta expirada !!!",
                 "Api key esta expirada !!!",
                 "Api key esta expirada !!!",
-            )
+            );
         }
 
         req.headers["x-api-key"] = foundedApiKey.apiKey;
     }
-}
+};

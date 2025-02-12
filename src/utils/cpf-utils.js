@@ -1,4 +1,5 @@
 import {cpf} from 'cpf-cnpj-validator';
+
 import {onlyNumbers} from "./string-utils.js";
 
 /**
@@ -8,7 +9,7 @@ import {onlyNumbers} from "./string-utils.js";
  */
 export const generate = (formatted = false) => {
     return cpf.generate(formatted);
-}
+};
 
 /**
  * Verifica se um CPF é válido.
@@ -17,7 +18,7 @@ export const generate = (formatted = false) => {
  */
 export const isValid = (value) => {
     return cpf.isValid(String(value));
-}
+};
 
 /**
  * Formata um CPF, adicionando os pontos e traço.
@@ -30,4 +31,4 @@ export const format = (value) => {
     }
     value = onlyNumbers(String(value)).padStart(11, '0');
     return cpf.format(value);
-}
+};

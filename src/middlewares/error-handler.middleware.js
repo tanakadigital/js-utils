@@ -90,4 +90,4 @@ export const errorHandler = {
 
         next();
     }
-}
+};

@@ -1,4 +1,4 @@
-import {StringUtils} from "@tanakadigital/js-utils/utils";
+import {stringUtils} from "../utils/index.js";
 import {globals} from "../globals/index.js"; // Ajuste o caminho conforme necessário
 
 export const systemEventMiddleware = {
@@ -21,7 +21,7 @@ export const systemEventMiddleware = {
                 params: req.params,
                 headers: req.headers,
                 sourceApiUrl: req.url,
-                systemEventUuid: StringUtils.randomUUID()
+                systemEventUuid: stringUtils.randomUUID()
             };
 
             res.on('finish', () => {
@@ -29,7 +29,7 @@ export const systemEventMiddleware = {
                 const isError = !!req.errorHandlingError;
                 const ignoreErrorSystemEvents = req?.errorHandlingError?.ignoreSystemEvent || false;
 
-                const asyncScheduleEventProcessorTask = globals.getByName('asyncScheduleEventProcessorTask')
+                const asyncScheduleEventProcessorTask = globals.getByName('asyncScheduleEventProcessorTask');
 
                 if (!ignoreErrorSystemEvents) {
                     asyncScheduleEventProcessorTask(
@@ -43,6 +43,6 @@ export const systemEventMiddleware = {
                 }
             });
             next();
-        }
+        };
     }
-}
+};

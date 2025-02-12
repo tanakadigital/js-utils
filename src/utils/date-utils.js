@@ -239,7 +239,7 @@ export const convertAnyToDate = (dateAny) => {
     for (const pattern of patterns) {
         const match = dateString.match(pattern);
         if (match?.groups) {
-            const { day, month, year } = match.groups;
+            const {day, month, year} = match.groups;
             formattedDateString = `${year}-${month}-${day}`;
             break;
         }

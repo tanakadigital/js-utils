@@ -28,7 +28,7 @@ export class CustomError extends Error {
         this.userMessage = userMessage;
         this.internalMessage = internalMessage;
         this.enableReportButton = enableReportButton;
-        this.ignoreSystemEvent = ignoreSystemEvent
+        this.ignoreSystemEvent = ignoreSystemEvent;
 
         // Converte para array se for string única
         if (typeof discordWebhookUrl === 'string') {
@@ -62,7 +62,7 @@ export class CustomErrorAppName extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = appName
+        this.appName = appName;
         // Propriedades adicionais
         this.cause = cause;
         this.httpStatusCode = httpStatusCode;
