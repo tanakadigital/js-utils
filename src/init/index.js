@@ -8,7 +8,8 @@ export const Init = {
         projectId,
         mongoClient,
         applicationDatabaseName,
-        asyncScheduleEventProcessorTask
+        asyncScheduleEventProcessorTask,
+        discordWebhookUrl
     ) {
         if (!this.isInitialized) {
 
@@ -22,6 +23,8 @@ export const Init = {
             globals.values.apisRegistryCollection = globals.values.mongoClientDatabase.collection("apisRegistry");
 
             globals.values.asyncScheduleEventProcessorTask = asyncScheduleEventProcessorTask;
+
+            globals.values.discordWebhookUrl = discordWebhookUrl;
 
             this.isInitialized = true;
         }

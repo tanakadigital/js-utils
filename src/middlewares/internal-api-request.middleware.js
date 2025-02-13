@@ -89,6 +89,19 @@ export const internalApiRequestMiddleware = {
                     "Api key esta expirada !!!",
                 );
             }
+
+            await apisKeysCollection.updateOne({
+                appName: appName,
+                apiKey: xApiKey,
+            }, {
+                $set: {
+                    lastUsedAt: now
+                },
+                $inc: {
+                    qtdUsed: 1
+                }
+            });
+
             next();
         } catch (e) {
             next(e);

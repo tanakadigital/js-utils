@@ -22,6 +22,18 @@ export class CustomError extends Error {
         this.name = this.constructor.name;
 
         this.appName = Init.isInitialized ? globals.getByName("appName") : "custom-error";
+
+        if (Init.isInitialized) {
+            this.appName = globals.getByName("appName");
+
+            const defaultAppDiscordWebhookUrl = globals.getByName("discordWebhookUrl");
+
+            this.discordWebhookUrls.push(defaultAppDiscordWebhookUrl);
+
+        } else {
+            this.appName = "custom-error";
+        }
+
         // Propriedades adicionais
         this.cause = cause;
         this.httpStatusCode = httpStatusCode;
@@ -35,8 +47,6 @@ export class CustomError extends Error {
             this.discordWebhookUrls = [discordWebhookUrl];
         } else if (Array.isArray(discordWebhookUrl)) {
             this.discordWebhookUrls = discordWebhookUrl;
-        } else {
-            this.discordWebhookUrls = [];
         }
     }
 }
