@@ -46,9 +46,12 @@ export class CustomError extends Error {
 
         // Converte para array se for string única
         if (typeof discordWebhookUrl === 'string') {
-            this.discordWebhookUrls = [discordWebhookUrl];
+            this.discordWebhookUrls.push(discordWebhookUrl);
         } else if (Array.isArray(discordWebhookUrl)) {
-            this.discordWebhookUrls = discordWebhookUrl;
+
+            for (const url of discordWebhookUrl) {
+                this.discordWebhookUrls.push(url);
+            }
         }
     }
 }
