@@ -7,6 +7,8 @@ import {Init} from "../../init/index.js";
  * - Recebe um `discordWebhookUrl` (string ou array) para notificar no Discord (opcional).
  */
 export class CustomError extends Error {
+    discordWebhookUrls = [];
+
     constructor(
         message = 'Custom error',
         cause = null,
