@@ -1,6 +1,6 @@
 import {discordService} from '../discord/index.js';
 import {stringUtils} from "../utils/index.js";
-import {discordColors} from "../discord/discord-hook.service.js";
+import {discordColors} from "../discord/index.js";
 
 export const errorHandler = {
     async middleware(err, req, res, next) {
