@@ -1,5 +1,3 @@
-import {internalApiAuthUtils} from "../utils/internal-api-auth.utils.js";
-
 export const fetchService = {
 
     /**
