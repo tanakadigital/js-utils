@@ -4,7 +4,8 @@ export const Init = {
     isInitialized: false,
     inititalizeJsUtils(
         appName, projectId,
-        discordWebhookUrl
+        discordWebhookUrl,
+        discordAppErrorsWebhookUrl
     ) {
         if (!this.isInitialized) {
 
@@ -12,6 +13,7 @@ export const Init = {
             globals.values.projectId = projectId;
 
             globals.values.discordWebhookUrl = discordWebhookUrl;
+            globals.values.discordAppErrorsWebhookUrl = discordAppErrorsWebhookUrl;
 
             this.isInitialized = true;
         }
