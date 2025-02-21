@@ -22,7 +22,7 @@ export const errorHandler = {
             if (Init.isInitialized) {
                 appName = globals.getByName("appName");
             } else {
-                appName = 'No application name'
+                appName = 'No application name';
             }
         }
 
