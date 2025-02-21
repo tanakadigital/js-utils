@@ -4,16 +4,12 @@ export const Init = {
     isInitialized: false,
     inititalizeJsUtils(
         appName, projectId,
-        apisKeysCollection, apisRegistryCollection, applicationDatabaseName,
         discordWebhookUrl
     ) {
         if (!this.isInitialized) {
 
             globals.values.appName = appName;
             globals.values.projectId = projectId;
-
-            globals.values.apisKeysCollection = apisKeysCollection;
-            globals.values.apisRegistryCollection = apisRegistryCollection;
 
             globals.values.discordWebhookUrl = discordWebhookUrl;
 

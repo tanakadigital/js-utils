@@ -1,6 +1,6 @@
 {
   "name": "@tanakadigital/js-utils",
-  "version": "0.0.74",
+  "version": "0.0.75",
   "description": "Uma biblioteca utilitária com funções de erros, integração com Discord, logs e helpers genéricos.",
   "type": "module",
   "module": "./src/index.js",
@@ -49,3 +49,4 @@
   },
   "private": false
 }
+
