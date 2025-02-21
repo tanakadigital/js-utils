@@ -1,6 +1,5 @@
-import {discordService} from '../discord/index.js';
+import {discordColors, discordService} from '../discord/index.js';
 import {stringUtils} from "../utils/index.js";
-import {discordColors} from "../discord/index.js";
 import {Init} from "../init/index.js";
 import {globals} from "../globals/index.js";
 
@@ -18,11 +17,20 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
+        let appName = err.appName;
+        if (!appName?.length) {
+            if (Init.isInitialized) {
+                appName = globals.getByName("appName");
+            } else {
+                appName = 'No application name'
+            }
+        }
+
         // Monta detalhes do erro
         const discordMessageEmbeds = [
             {
                 title: 'Application Name',
-                description: err.appName || 'No application name',
+                description: appName,
                 inline: false,
             },
             {
