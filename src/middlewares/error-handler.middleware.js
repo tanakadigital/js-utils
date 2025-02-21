@@ -37,7 +37,7 @@ export const errorHandler = {
             },
         ];
 
-        const discordAppErrorsWebhookUrl = globals.getByName("discordAppErrorsWebhookUrl")
+        const discordAppErrorsWebhookUrl = globals.getByName("discordAppErrorsWebhookUrl");
 
         // Se o erro for de uma classe que herda de CustomError, ele pode ter `discordWebhookUrls`.
         // Caso não tenha ou seja vazio, não enviaremos nada.
