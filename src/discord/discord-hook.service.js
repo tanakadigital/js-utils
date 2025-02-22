@@ -21,7 +21,6 @@ export const discordService = {
      * @param {string} title
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
-     * @param {number} [color] - Cor do embed.
      * @param {string[]} channelUrls - Lista obrigatória de Webhooks do Discord.
      */
 
@@ -29,7 +28,6 @@ export const discordService = {
         title,
         shortDescription,
         embedFields = [],
-        color = 0x00ff00,
         channelUrls
     ) {
         if (!Array.isArray(channelUrls) || channelUrls.length === 0) {
@@ -45,6 +43,14 @@ export const discordService = {
         let shortDescriptionLimited = shortDescription || '';
         if (shortDescriptionLimited.length > 2048) {
             shortDescriptionLimited = shortDescriptionLimited.substring(0, 2044) + '...';
+        }
+
+        let color = discordColors.red;
+
+        if (process.env.NODE_ENV === 'development') {
+            color = discordColors.green;
+        } else if (process.env.NODE_ENV === 'staging') {
+            color = discordColors.blue;
         }
 
         const embed = {
