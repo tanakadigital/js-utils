@@ -17,14 +17,10 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
-        let appName = err.appName;
-        if (!appName?.length) {
-            if (Init.isInitialized) {
-                appName = globals.getByName("appName");
-            } else {
-                appName = 'No application name';
-            }
-        }
+        const appName =
+            err.appName || Init.isInitialized ?
+                globals.getByName("appName") :
+                'No application name';
 
         // Monta detalhes do erro
         const discordMessageEmbeds = [
