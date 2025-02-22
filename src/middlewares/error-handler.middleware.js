@@ -88,7 +88,6 @@ export const errorHandler = {
                     title,
                     description,
                     discordMessageEmbeds,
-                    discordColors.red,
                     channelUrls
                 );
             } catch (notificationError) {
