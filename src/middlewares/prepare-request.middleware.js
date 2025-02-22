@@ -15,6 +15,21 @@ export const prepareRequest = {
             req.requestReceivedAt = new Date();
         }
 
+
+        const requestInfo = {
+            method: req.method,
+            path: req.path,
+            url: req.url,
+            body: req.body,
+            query: req.query,
+            params: req.params,
+            headers: req.headers,
+            sourceApiUrl: req.url,
+            systemEventUuid: stringUtils.randomUUID()
+        };
+
+        req.requestInfo = requestInfo;
+
         if (Init.isInitialized) {
             req.appName = globals.getByName('appName');
         }
