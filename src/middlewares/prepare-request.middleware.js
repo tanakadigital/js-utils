@@ -25,7 +25,8 @@ export const prepareRequest = {
             params: req.params,
             headers: req.headers,
             sourceApiUrl: req.url,
-            systemEventUuid: stringUtils.randomUUID()
+            systemEventUuid: stringUtils.randomUUID(),
+            clientIp: req.clientIp
         };
 
         req.requestInfo = requestInfo;
