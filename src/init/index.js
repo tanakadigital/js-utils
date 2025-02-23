@@ -16,6 +16,8 @@ export const Init = {
             globals.values.discordAppErrorsWebhookUrl = discordAppErrorsWebhookUrl;
 
             this.isInitialized = true;
+
+            return globals;
         }
     },
 };
