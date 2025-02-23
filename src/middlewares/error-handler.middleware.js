@@ -17,13 +17,13 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
-        let appName = err.appName
+        let appName = err.appName;
 
         if (!appName?.length) {
             if (Init.isInitialized) {
                 appName = globals.getByName("appName");
             } else {
-                appName = 'No application name'
+                appName = 'No application name';
             }
         }
 
