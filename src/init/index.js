@@ -31,8 +31,8 @@ export const Init = {
 
             this.isInitialized = true;
 
-            return globals;
         }
+        return globals;
     },
 };
 
