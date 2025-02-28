@@ -8,7 +8,7 @@ export const constants = {
     _isInitialized: false,
 
     appName: "Not found",
-    projectId: "Not found",
+    projectId: process.env.GCP_PROJECT_ID,
     defaultAppDiscordWebhookUrl: "https://discord.com/api/webhooks/1341162438187417681/rt23Yv3afC3ZpGw9LH5y0i8VVV_o0zwHeuRXRvAQIt1znFxwPTm1cDa8Rzczr4cwN6jj",
     defaultAppDiscordErrorsWebhookUrl: "https://discord.com/api/webhooks/1342627488466997330/J-kkv4lmnQVEYhWQtJ9sQafBxwiOTDOMopunWKlFui69hsexzY_ipW8yT5bcdaT5SCZ6",
 

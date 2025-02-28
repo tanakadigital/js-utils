@@ -1,7 +1,7 @@
 import {CloudTasksClient} from '@google-cloud/tasks';
 
 import {BadRequestError} from '../errors/index.js';
-import {projectId} from '../utils/constants.js';
+import {constants} from "../utils/index.js";
 
 export const cloudTaskUtils = {
 
@@ -77,7 +77,7 @@ export const cloudTaskUtils = {
             );
         }
 
-        const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
+        const parent = `projects/${constants.projectId}/locations/southamerica-east1/queues/${queueName}`;
 
         const task = {
             httpRequest: taskHttpRequest,
