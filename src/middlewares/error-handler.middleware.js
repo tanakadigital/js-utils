@@ -1,6 +1,5 @@
 import {discordService} from '../discord/index.js';
-import {stringUtils} from "../utils/index.js";
-import {constants} from "../utils/index.js";
+import {constants, stringUtils} from "../utils/index.js";
 
 export const errorHandler = {
     async middleware(err, req, res, next) {
@@ -16,7 +15,7 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
-        const appName = appName?.length ? err.appName : constants.appName;
+        const appName = err.appName || constants.appName;
 
         // Monta detalhes do erro
         const discordMessageEmbeds = [
