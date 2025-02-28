@@ -1,6 +1,5 @@
 import {stringUtils} from "../utils/index.js";
-import {Init} from "../init/index.js";
-import {globals} from "../globals/index.js";
+import {appName} from "../utils/constants.js";
 
 
 export const prepareRequest = {
@@ -31,9 +30,7 @@ export const prepareRequest = {
 
         req.requestInfo = requestInfo;
 
-        if (Init.isInitialized) {
-            req.appName = globals.getByName('appName');
-        }
+        req.appName = appName;
 
         next();
     }
