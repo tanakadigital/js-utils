@@ -1,7 +1,7 @@
 import {CloudTasksClient} from '@google-cloud/tasks';
 
 import {BadRequestError} from '../errors/index.js';
-import {constants, projectId} from '../utils/constants.js';
+import {projectId} from '../utils/constants.js';
 
 export const cloudTaskUtils = {
 
@@ -24,7 +24,8 @@ export const cloudTaskUtils = {
      *     }
      *   });
      * @param {string} queueName - nome da fila no cloudtask.
-     * @param {object} task - Objeto que deve conter os dados necessários para a tarefa.
+     * @param {object} taskHttpRequest - Objeto que deve conter os dados necessários para a tarefa.
+     * @param {object} scheduleTime - Objeto que deve conter os dados necessários para a tarefa.
      *   @property {string} task.parent - Caminho de projeto/fila, ex.: "projects/xxx/locations/xxx/queues/xxx".
      *   @property {object} task.httpRequest - Informações da requisição HTTP.
      *     @property {string} task.httpRequest.httpMethod - Método HTTP (ex.: "POST", "GET" etc.).
@@ -36,14 +37,19 @@ export const cloudTaskUtils = {
      * @returns {Promise<object>} Resposta do CloudTasksClient.createTask().
      */
 
-    async scheduleTask(queueName, task) {
-        if (!task || typeof task !== 'object') {
-            throw new BadRequestError(
-                'cloud-task',
-                'O parâmetro "task" é obrigatório e deve ser um objeto.'
-            );
-        }
-        const {httpRequest, scheduleTime} = task;
+    async scheduleTask(queueName,
+                       taskHttpRequest = {
+                           httpMethod: 'POST',
+                           url: '',
+                           headers: {
+                               'Content-Type': 'application/json'
+                           }
+                       },
+                       scheduleTime = {
+                           seconds: Math.floor(Date.now() / 1000) + 1 // 1 segundo
+                       }
+    ) {
+        const {httpRequest} = taskHttpRequest;
 
         if (!httpRequest || typeof httpRequest !== 'object') {
             throw new BadRequestError(
@@ -71,10 +77,16 @@ export const cloudTaskUtils = {
             );
         }
 
+        const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
+
+        const task = {
+            httpRequest: taskHttpRequest,
+            scheduleTime: scheduleTime
+        };
+
         if (scheduleTime) {
             task.scheduleTime = scheduleTime;
         }
-        const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
 
         const client = new CloudTasksClient();
         const [response] = await client.createTask({
