@@ -51,29 +51,27 @@ export const cloudTaskUtils = {
                        }
     ) {
         try {
-            const {httpRequest} = taskHttpRequest;
-
-            if (!httpRequest || typeof httpRequest !== 'object') {
+            if (!taskHttpRequest || typeof taskHttpRequest !== 'object') {
                 throw new BadRequestError(
                     'A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.'
                 );
             }
-            if (!httpRequest.httpMethod) {
+            if (!taskHttpRequest.httpMethod) {
                 throw new BadRequestError(
                     'httpRequest.httpMethod é obrigatório.'
                 );
             }
-            if (!httpRequest.url) {
+            if (!taskHttpRequest.url) {
                 throw new BadRequestError(
                     'httpRequest.url é obrigatório.'
                 );
             }
-            if (!httpRequest.headers || typeof httpRequest.headers !== 'object') {
+            if (!taskHttpRequest.headers || typeof taskHttpRequest.headers !== 'object') {
                 throw new BadRequestError(
                     'httpRequest.headers é obrigatório e deve ser um objeto.'
                 );
             }
-            if (httpRequest.headers['Content-Type'] !== 'application/json') {
+            if (taskHttpRequest.headers['Content-Type'] !== 'application/json') {
                 throw new BadRequestError(
                     'Header "Content-Type" precisa ser "application/json".'
                 );
