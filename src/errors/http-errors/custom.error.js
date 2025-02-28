@@ -1,4 +1,4 @@
-import {appName, defaultAppDiscordWebhookUrl} from "../../utils/constants.js";
+import {constants} from "../../utils/index.js";
 
 /**
  * Classe base para erros customizados.
@@ -22,8 +22,8 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = appName;
-        this.discordWebhookUrls.push(defaultAppDiscordWebhookUrl);
+        this.appName = constants.appName;
+        this.discordWebhookUrls.push(constants.defaultAppDiscordWebhookUrl);
 
         // Propriedades adicionais
         this.cause = cause;
