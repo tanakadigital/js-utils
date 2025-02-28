@@ -2,6 +2,7 @@ import {CloudTasksClient} from '@google-cloud/tasks';
 
 import {BadRequestError} from '../errors/index.js';
 import {constants} from "../utils/index.js";
+import {discordService} from "../discord/index.js";
 
 export const cloudTaskUtils = {
 
@@ -49,51 +50,78 @@ export const cloudTaskUtils = {
                            seconds: Math.floor(Date.now() / 1000) + 1 // 1 segundo
                        }
     ) {
-        const {httpRequest} = taskHttpRequest;
+        try {
+            const {httpRequest} = taskHttpRequest;
 
-        if (!httpRequest || typeof httpRequest !== 'object') {
-            throw new BadRequestError(
-                'A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.'
+            if (!httpRequest || typeof httpRequest !== 'object') {
+                throw new BadRequestError(
+                    'A propriedade "task.httpRequest" é obrigatória e deve ser um objeto.'
+                );
+            }
+            if (!httpRequest.httpMethod) {
+                throw new BadRequestError(
+                    'httpRequest.httpMethod é obrigatório.'
+                );
+            }
+            if (!httpRequest.url) {
+                throw new BadRequestError(
+                    'httpRequest.url é obrigatório.'
+                );
+            }
+            if (!httpRequest.headers || typeof httpRequest.headers !== 'object') {
+                throw new BadRequestError(
+                    'httpRequest.headers é obrigatório e deve ser um objeto.'
+                );
+            }
+            if (httpRequest.headers['Content-Type'] !== 'application/json') {
+                throw new BadRequestError(
+                    'Header "Content-Type" precisa ser "application/json".'
+                );
+            }
+
+            const parent = `projects/${constants.projectId}/locations/southamerica-east1/queues/${queueName}`;
+
+            const task = {
+                httpRequest: taskHttpRequest,
+                scheduleTime: scheduleTime
+            };
+
+            if (scheduleTime) {
+                task.scheduleTime = scheduleTime;
+            }
+
+            const client = new CloudTasksClient();
+            const [response] = await client.createTask({
+                parent,
+                task: task
+            });
+
+            return response;
+        } catch (e) {
+
+            const embedFields = [
+                {
+                    name: "queueName",
+                    value: queueName,
+                },
+                {
+                    name: "taskHttpRequest",
+                    value: JSON.stringify(taskHttpRequest),
+                },
+                {
+                    name: "scheduleTime",
+                    value: JSON.stringify(scheduleTime),
+                }
+            ];
+
+            await discordService.sendDiscord(
+                "Erro ao agendar tarefa no Cloud Tasks!!!",
+                "Erro: " + e.message,
+                embedFields,
+                [constants.defaultAppDiscordWebhookUrl]
             );
-        }
-        if (!httpRequest.httpMethod) {
-            throw new BadRequestError(
-                'httpRequest.httpMethod é obrigatório.'
-            );
-        }
-        if (!httpRequest.url) {
-            throw new BadRequestError(
-                'httpRequest.url é obrigatório.'
-            );
-        }
-        if (!httpRequest.headers || typeof httpRequest.headers !== 'object') {
-            throw new BadRequestError(
-                'httpRequest.headers é obrigatório e deve ser um objeto.'
-            );
-        }
-        if (httpRequest.headers['Content-Type'] !== 'application/json') {
-            throw new BadRequestError(
-                'Header "Content-Type" precisa ser "application/json".'
-            );
-        }
 
-        const parent = `projects/${constants.projectId}/locations/southamerica-east1/queues/${queueName}`;
-
-        const task = {
-            httpRequest: taskHttpRequest,
-            scheduleTime: scheduleTime
-        };
-
-        if (scheduleTime) {
-            task.scheduleTime = scheduleTime;
+            throw e;
         }
-
-        const client = new CloudTasksClient();
-        const [response] = await client.createTask({
-            parent,
-            task: task
-        });
-
-        return response;
     }
 };
