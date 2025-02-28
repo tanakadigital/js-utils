@@ -1,6 +1,6 @@
 import {discordService} from '../discord/index.js';
 import {stringUtils} from "../utils/index.js";
-import {defaultAppDiscordErrorsWebhookUrl} from "../utils/constants.js";
+import {constants} from "../utils/index.js";
 
 export const errorHandler = {
     async middleware(err, req, res, next) {
@@ -16,16 +16,7 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
-        let appName = err.appName;
-
-        if (!appName?.length) {
-            if (Init.isInitialized) {
-                appName = globals.getByName("appName");
-            } else {
-                appName = 'No application name';
-            }
-        }
-
+        const appName = appName?.length ? err.appName : constants.appName;
 
         // Monta detalhes do erro
         const discordMessageEmbeds = [
@@ -50,7 +41,7 @@ export const errorHandler = {
         // Caso não tenha ou seja vazio, não enviaremos nada.
         const channelUrls = Array.isArray(err.discordWebhookUrls)
             ? err.discordWebhookUrls
-            : [defaultAppDiscordErrorsWebhookUrl];
+            : [constants.defaultAppDiscordErrorsWebhookUrl];
 
         // Define status code e retorna userMessage de forma segura
         let httpStatusCode = err.httpStatusCode || 500;
