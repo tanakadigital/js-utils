@@ -1,5 +1,4 @@
-import {globals} from "../../globals/index.js";
-import {Init} from "../../init/index.js";
+import {appName, defaultAppDiscordWebhookUrl} from "../../utils/constants.js";
 
 /**
  * Classe base para erros customizados.
@@ -23,18 +22,8 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = Init.isInitialized ? globals.getByName("appName") : "custom-error";
-
-        if (Init.isInitialized) {
-            this.appName = globals.getByName("appName");
-
-            const defaultAppDiscordWebhookUrl = globals.getByName("discordWebhookUrl");
-
-            this.discordWebhookUrls.push(defaultAppDiscordWebhookUrl);
-
-        } else {
-            this.appName = "custom-error";
-        }
+        this.appName = appName;
+        this.discordWebhookUrls.push(defaultAppDiscordWebhookUrl);
 
         // Propriedades adicionais
         this.cause = cause;

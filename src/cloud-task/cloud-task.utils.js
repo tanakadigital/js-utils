@@ -1,8 +1,7 @@
 import {CloudTasksClient} from '@google-cloud/tasks';
 
 import {BadRequestError} from '../errors/index.js';
-import {globals} from "../globals/index.js";
-
+import {constants, projectId} from '../utils/constants.js';
 
 export const cloudTaskUtils = {
 
@@ -75,7 +74,6 @@ export const cloudTaskUtils = {
         if (scheduleTime) {
             task.scheduleTime = scheduleTime;
         }
-        const projectId = globals.getByName("projectId");
         const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
 
         const client = new CloudTasksClient();

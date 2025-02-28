@@ -1,7 +1,6 @@
 import {discordService} from '../discord/index.js';
 import {stringUtils} from "../utils/index.js";
-import {Init} from "../init/index.js";
-import {globals} from "../globals/index.js";
+import {defaultAppDiscordErrorsWebhookUrl} from "../utils/constants.js";
 
 export const errorHandler = {
     async middleware(err, req, res, next) {
@@ -47,13 +46,11 @@ export const errorHandler = {
             },
         ];
 
-        const discordAppErrorsWebhookUrl = globals.getByName("discordAppErrorsWebhookUrl");
-
         // Se o erro for de uma classe que herda de CustomError, ele pode ter `discordWebhookUrls`.
         // Caso não tenha ou seja vazio, não enviaremos nada.
         const channelUrls = Array.isArray(err.discordWebhookUrls)
             ? err.discordWebhookUrls
-            : [discordAppErrorsWebhookUrl];
+            : [defaultAppDiscordErrorsWebhookUrl];
 
         // Define status code e retorna userMessage de forma segura
         let httpStatusCode = err.httpStatusCode || 500;
