@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
+
 import {BadRequestError} from "../errors/index.js";
+
+dotenv.config();
 
 if (!process.env.APP_NAME) {
     throw new BadRequestError("App name not found");
