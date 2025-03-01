@@ -96,7 +96,6 @@ export const cloudTaskUtils = {
 
             return response;
         } catch (e) {
-
             const embedFields = [
                 {
                     name: "queueName",
@@ -116,7 +115,7 @@ export const cloudTaskUtils = {
                 "Erro ao agendar tarefa no Cloud Tasks!!!",
                 "Erro: " + e.message,
                 embedFields,
-                [constants.defaultAppDiscordWebhookUrl]
+                [constants.defaultAppDiscordCloudTaskErrorsWebhookUrl]
             );
 
             throw e;
