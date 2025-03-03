@@ -8,7 +8,7 @@ export const profilerMiddleware = {
 
         // Quando a requisição terminar, finalizamos o profiler e verificamos se precisa notificar
         res.on("finish", () => {
-            req.profiler.finish();
+            req.profiler.finishProcess();
         });
 
         next();
