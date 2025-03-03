@@ -4,7 +4,7 @@ export {
 
 export {
     profilerMiddleware
-} from "./profiler.middleware.js"
+} from "./profiler.middleware.js";
 
 export {
     errorHandler,
