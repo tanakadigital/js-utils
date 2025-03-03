@@ -127,7 +127,7 @@ export const profiler = {
                     title,
                     description,
                     discordMessageEmbeds,
-                    [constants.defaultAppDiscordErrorsWebhookUrl],
+                    [constants.defaultAppProfilerAlertsWebhookUrl],
                     color
                 ).catch(error => console.error("Erro ao enviar notificação ao Discord:", error));
             }
