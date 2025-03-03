@@ -111,7 +111,7 @@ export const cloudTaskUtils = {
                 }
             ];
 
-            await discordService.sendDiscord(
+            await discordService.sendApplicationDiscord(
                 "Erro ao agendar tarefa no Cloud Tasks!!!",
                 "Erro: " + e.message,
                 embedFields,

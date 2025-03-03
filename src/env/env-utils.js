@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
 
 import {ServerError} from '../errors/index.js';
+import {discordService} from "../discord/index.js";
+import {constants} from "../utils/index.js";
 
 const secretManagerClient = new SecretManagerServiceClient();
 const envCache = {};
@@ -69,6 +71,12 @@ const accessSecret = async (secretName) => {
         return version.payload.data.toString('utf8');
     } catch (error) {
         console.error(`Erro ao buscar o segredo "${secretName}":`, error);
+        await discordService.sendApplicationDiscord(
+            `Erro ao buscar o segredo "${secretName}":`,
+            "e.message: " + error.message,
+            null,
+            [constants.defaultAppDiscordCloudTaskErrorsWebhookUrl]
+        );
         return null;
     }
 };

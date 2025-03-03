@@ -11,7 +11,7 @@ export const errorHandler = {
         const title = 'Error in RequestLoggingMiddlewareService.errorHandlerMiddleware';
         const description = `
 **Method**: ${req.method}
-**URL**: ${req.originalUrl}
+**URL**: ${req.url}
 **TraceId**: ${traceId}
 `.trim();
 
@@ -77,7 +77,7 @@ export const errorHandler = {
         // Notifica no Discord APENAS se houver URLs
         if (channelUrls.length > 0) {
             try {
-                await discordService.sendDiscord(
+                await discordService.sendApplicationDiscord(
                     title,
                     description,
                     discordMessageEmbeds,
