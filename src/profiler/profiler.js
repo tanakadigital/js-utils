@@ -1,6 +1,5 @@
-import { stringUtils } from "../utils/index.js";
-import { discordService, discordColors } from "../discord/index.js";
-import { constants } from "../utils/index.js";
+import {constants, stringUtils} from "../utils/index.js";
+import {discordColors, discordService} from "../discord/index.js";
 
 export const profiler = {
     createProfiler(processName, requestThresholdMs = 1000) {
@@ -84,6 +83,7 @@ export const profiler = {
                     : `⚠️ PROCESSO LENTO DETECTADO ⚠️`;
 
                 let description = `
+**App Name:** ${constants.appName}
 **Processo:** ${this.processName}
 **Duração:** ${timeInMilis}ms ⏳
 **TraceId:** ${traceId}
