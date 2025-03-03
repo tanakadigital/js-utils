@@ -1,5 +1,5 @@
 import { stringUtils } from "../utils/index.js";
-import { discordService } from "../discord/index.js";
+import { discordService, discordColors } from "../discord/index.js";
 import { constants } from "../utils/index.js";
 
 export const profiler = {
@@ -32,13 +32,13 @@ export const profiler = {
              * Finaliza um passo e verifica se precisa notificar o Discord.
              * @param {string} stepName - Nome do passo a ser finalizado
              */
-            endStep(stepName) {
+            finishStep(stepName) {
                 const step = this.steps.find(s => s.stepName === stepName && !s.endTime);
                 if (step) {
                     step.endTime = new Date();
                     step.durationMs = step.endTime.getTime() - step.startTime.getTime();
 
-                    // 🚨 Verifica se o passo ultrapassou o tempo mínimo antes de notificar
+                    // 🚨 Se o tempo do step ultrapassar o mínimo, notificar
                     if (step.stepThresholdMs !== null && step.durationMs > step.stepThresholdMs) {
                         this.notifyDiscord(step.durationMs, step, false)
                             .catch(error => console.error("Erro ao notificar Discord para step:", step.stepName, error));
@@ -47,9 +47,9 @@ export const profiler = {
             },
 
             /**
-             * Finaliza o profiler e verifica se a requisição como um todo deve ser notificada.
+             * Finaliza o profiler e verifica se a requisição inteira deve ser notificada.
              */
-            finish() {
+            finishProcess() {
                 this.endTime = new Date();
                 this.totalDurationMs = this.endTime.getTime() - this.startTime.getTime();
 
@@ -116,11 +116,11 @@ export const profiler = {
                 }
 
                 // Definir cor com base no tempo
-                let color = constants.discordColors.green; // Rápido
+                let color = discordColors.green; // Rápido
                 if (timeInMilis > 2 * this.requestThresholdMs) {
-                    color = constants.discordColors.red; // Muito lento
+                    color = discordColors.red; // Muito lento
                 } else if (timeInMilis > this.requestThresholdMs) {
-                    color = constants.discordColors.yellow; // Médio
+                    color = discordColors.yellow; // Médio
                 }
 
                 return discordService.sendDiscord(
