@@ -1,4 +1,4 @@
-import { stringUtils } from "../utils";
+import { stringUtils } from "../utils/index.js";
 import { discordService } from "../discord/index.js";
 import { constants } from "../utils/index.js";
 
@@ -8,7 +8,7 @@ export const profiler = {
             uuid: stringUtils.randomUUID(),
             processName,
             startTime: new Date(),
-            requestThresholdMs, // Limite para a requisição
+            requestThresholdMs,
             steps: [],
 
             /**
