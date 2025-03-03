@@ -1,6 +1,6 @@
-import {constants} from "../utils/index.js";
+import { constants } from "../utils/index.js";
 
-import {fetchService} from './fetch.service.js';
+import { fetchService } from "./fetch.service.js";
 
 export const discordColors = {
     red: 0xff0000,
@@ -19,69 +19,67 @@ export const discordColors = {
 
 export const discordService = {
     /**
-     * Envia uma mensagem para um ou mais canais Discord via webhook, permitindo definir a cor.
+     * Envia uma mensagem para um ou mais canais do Discord via webhook, permitindo definir a cor.
      * @param {string} title
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
-     * @param {string[]} channelUrls - Lista obrigatória de Webhooks do Discord.
-     * @param {number} color - Cor do embed no formato hexadecimal (ex: discordColors.red).
+     * @param {string[]} channelUrls - Lista de Webhooks do Discord (obrigatório).
+     * @param {number} [color=discordColors.grey] - Cor do embed no formato hexadecimal (ex: discordColors.red).
      */
-    async sendDiscord(title, shortDescription, embedFields = [], channelUrls, color) {
+    async sendDiscord(title, shortDescription, embedFields = [], channelUrls, color = discordColors.grey) {
         if (!Array.isArray(channelUrls) || channelUrls.length === 0) {
-            console.warn('DiscordService.sendDiscord chamado sem channelUrls. Nenhuma mensagem enviada.');
+            console.warn("⚠️ DiscordService.sendDiscord chamado sem channelUrls. Nenhuma mensagem enviada.");
             return;
         }
 
-        let titleLimited = title || 'No title in Discord notification!';
+        let titleLimited = title || "No title in Discord notification!";
         if (titleLimited.length > 256) {
-            titleLimited = titleLimited.substring(0, 252) + '...';
+            titleLimited = titleLimited.substring(0, 252) + "...";
         }
 
-        let shortDescriptionLimited = shortDescription || '';
+        let shortDescriptionLimited = shortDescription || "";
         if (shortDescriptionLimited.length > 2048) {
-            shortDescriptionLimited = shortDescriptionLimited.substring(0, 2044) + '...';
+            shortDescriptionLimited = shortDescriptionLimited.substring(0, 2044) + "...";
         }
 
         const embed = {
             title: titleLimited,
             description: shortDescriptionLimited,
-            color: color || discordColors.grey, // Se não for passada cor, usa cinza
+            color, // Cor agora sempre definida corretamente
             fields: [],
         };
 
         if (Array.isArray(embedFields) && embedFields.length > 0) {
             embedFields.forEach((fieldItem) => {
-                const inline = !!fieldItem.inline;
-                let fieldTitle = fieldItem.title || '';
+                let fieldTitle = fieldItem.title || "";
                 if (fieldTitle.length > 256) {
-                    fieldTitle = fieldTitle.substring(0, 252) + '...';
+                    fieldTitle = fieldTitle.substring(0, 252) + "...";
                 }
-                let fieldDescription = fieldItem.description || '';
+                let fieldDescription = fieldItem.description || "";
                 if (fieldDescription.length > 1024) {
-                    fieldDescription = fieldDescription.substring(0, 1020) + '...';
+                    fieldDescription = fieldDescription.substring(0, 1020) + "...";
                 }
                 embed.fields.push({
                     name: `**${fieldTitle}**`,
                     value: fieldDescription,
-                    inline,
+                    inline: !!fieldItem.inline,
                 });
             });
         }
 
         for (const channelUrl of channelUrls) {
-            try {
-                const response = await fetchService.safeFetch(channelUrl, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({embeds: [embed]}),
-                });
-
-                if (!response.ok) {
-                    console.error(`Falha ao enviar webhook para: ${channelUrl}, Status: ${response.status}`);
-                }
-            } catch (error) {
-                console.error('Erro ao enviar notificação Discord:', error);
-            }
+            fetchService
+                .safeFetch(channelUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed] }),
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.status}`);
+                    }
+                })
+                .catch((error) => console.error("❌ Erro ao enviar notificação Discord:", error));
         }
     },
 
@@ -90,19 +88,18 @@ export const discordService = {
      * @param {string} title
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
-     * @param {string[]} channelUrls
+     * @param {string[]} [channelUrls=[constants.defaultAppDiscordWebhookUrl]] - Webhook de destino
      */
-    async sendApplicationDiscord(title, shortDescription,
-                                 embedFields = [], channelUrls=[constants.defaultAppDiscordWebhookUrl]) {
+    async sendApplicationDiscord(title, shortDescription, embedFields = [], channelUrls = [constants.defaultAppDiscordWebhookUrl]) {
         let color = discordColors.red; // Produção (vermelho por padrão)
 
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
             color = discordColors.green;
-        } else if (process.env.NODE_ENV === 'staging') {
+        } else if (process.env.NODE_ENV === "staging") {
             color = discordColors.blue;
         }
 
-        await this.sendDiscord(title, shortDescription, embedFields, channelUrls, color);
+        return this.sendDiscord(title, shortDescription, embedFields, channelUrls, color);
     },
 
     /**
@@ -110,19 +107,21 @@ export const discordService = {
      * @param {string} title
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
-     * @param {string[]} channelUrls
      * @param {number} durationMs - Tempo de execução do processo.
+     * @param {string[]} [channelUrls=[constants.defaultAppProfilerAlertsWebhookUrl]] - Webhook de destino.
+     * @param {number} [customColor=null] - Cor customizada (se passar, ignora a lógica automática).
      */
-    async sendProfilerDiscord(title, shortDescription, embedFields = [],
-                              durationMs, channelUrls = [constants.defaultAppProfilerAlertsWebhookUrl]) {
-        let color = discordColors.green; // Rápido = verde
+    async sendProfilerDiscord(title, shortDescription, embedFields = [], durationMs, channelUrls = [constants.defaultAppProfilerAlertsWebhookUrl], customColor = null) {
+        let color = customColor || discordColors.green; // Se não passar cor customizada, usa regra automática
 
-        if (durationMs > 500 && durationMs <= 1000) {
-            color = discordColors.yellow; // Médio = amarelo
-        } else if (durationMs > 1000) {
-            color = discordColors.red; // Lento = vermelho
+        if (!customColor) { // Só aplica regras de cor se não foi passada uma cor customizada
+            if (durationMs > 500 && durationMs <= 1000) {
+                color = discordColors.yellow; // Médio = amarelo
+            } else if (durationMs > 1000) {
+                color = discordColors.red; // Lento = vermelho
+            }
         }
 
-        await this.sendDiscord(title, shortDescription, embedFields, channelUrls, color);
+        return this.sendDiscord(title, shortDescription, embedFields, channelUrls, color);
     }
 };

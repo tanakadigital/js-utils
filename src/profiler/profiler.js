@@ -1,38 +1,65 @@
-import {constants, stringUtils} from "../utils";
-import {discordService} from "../discord/index.js";
+import { stringUtils } from "../utils";
+import { discordService } from "../discord/index.js";
+import { constants } from "../utils/index.js";
 
 export const profiler = {
-    createProfiler(processName) {
+    createProfiler(processName, requestThresholdMs = 1000) {
         return {
             uuid: stringUtils.randomUUID(),
             processName,
             startTime: new Date(),
+            requestThresholdMs, // Limite para a requisição
             steps: [],
-            startStep(stepName, description = "") {
+
+            /**
+             * Inicia um novo passo no profiler.
+             * @param {string} stepName - Nome do passo
+             * @param {string} description - Descrição opcional do passo
+             * @param {number|null} stepThresholdMs - Tempo mínimo antes de notificar (padrão: 50ms)
+             */
+            startStep(stepName, description = "", stepThresholdMs = 50) {
                 this.steps.push({
                     stepName,
                     description,
                     startTime: new Date(),
                     endTime: null,
-                    durationMs: null
+                    durationMs: null,
+                    stepThresholdMs // Tempo mínimo antes de notificar
                 });
             },
+
+            /**
+             * Finaliza um passo e verifica se precisa notificar o Discord.
+             * @param {string} stepName - Nome do passo a ser finalizado
+             */
             endStep(stepName) {
                 const step = this.steps.find(s => s.stepName === stepName && !s.endTime);
                 if (step) {
                     step.endTime = new Date();
                     step.durationMs = step.endTime.getTime() - step.startTime.getTime();
 
-                    // 🚨 Se um passo demorou mais de 500ms, enviamos alerta no Discord
-                    if (step.durationMs > 500) {
-                        this.notifyDiscord(step.durationMs, step);
+                    // 🚨 Verifica se o passo ultrapassou o tempo mínimo antes de notificar
+                    if (step.stepThresholdMs !== null && step.durationMs > step.stepThresholdMs) {
+                        this.notifyDiscord(step.durationMs, step, false)
+                            .catch(error => console.error("Erro ao notificar Discord para step:", step.stepName, error));
                     }
                 }
             },
+
+            /**
+             * Finaliza o profiler e verifica se a requisição como um todo deve ser notificada.
+             */
             finish() {
                 this.endTime = new Date();
                 this.totalDurationMs = this.endTime.getTime() - this.startTime.getTime();
+
+                // 🚨 Se a requisição ultrapassou o limite definido, notificar com TODOS os steps
+                if (this.totalDurationMs > this.requestThresholdMs) {
+                    this.notifyDiscord(this.totalDurationMs, null, true)
+                        .catch(error => console.error("Erro ao notificar Discord para requisição:", this.processName, error));
+                }
             },
+
             getReport() {
                 return {
                     uuid: this.uuid,
@@ -43,55 +70,66 @@ export const profiler = {
                     steps: this.steps,
                 };
             },
-            async notifyDiscord(timeInMilis, step) {  // Agora recebe timeInMilis como parâmetro
-                try {
-                    const traceId = stringUtils.randomUUID();
-                    const title = `⚠️ ALTA LATÊNCIA DETECTADA ⚠️`;
-                    const description = `
+
+            /**
+             * Envia uma notificação ao Discord.
+             * @param {number} timeInMilis - Tempo de execução
+             * @param {object|null} step - Step (se for notificação individual de step)
+             * @param {boolean} isRequest - Se é para notificar a requisição inteira
+             */
+            async notifyDiscord(timeInMilis, step = null, isRequest = false) {
+                const traceId = stringUtils.randomUUID();
+                const title = isRequest
+                    ? `⚠️ REQUISIÇÃO LENTA DETECTADA ⚠️`
+                    : `⚠️ PROCESSO LENTO DETECTADO ⚠️`;
+
+                let description = `
 **Processo:** ${this.processName}
-**Passo:** ${step.stepName}
 **Duração:** ${timeInMilis}ms ⏳
 **TraceId:** ${traceId}
 **Data:** ${new Date().toISOString()}
 `.trim();
 
-                    const discordMessageEmbeds = [
-                        {
-                            title: 'App Name',
-                            description: constants.appName,
-                            inline: false,
-                        },
-                        {
-                            title: 'Processo',
-                            description: this.processName,
-                            inline: false,
-                        },
-                        {
-                            title: 'Passo',
-                            description: step.stepName,
-                            inline: false,
-                        },
-                        {
-                            title: 'Duração (ms)',
-                            description: `${timeInMilis}`,
-                            inline: false,
-                        },
-                        {
-                            title: 'Data/Hora',
-                            description: new Date().toISOString(),
-                            inline: false,
-                        }
-                    ];
+                const discordMessageEmbeds = [];
 
-                    await discordService.sendProfilerDiscord(
-                        title,
-                        description,
-                        discordMessageEmbeds,
-                        timeInMilis
-                    );
-                } catch (error) {
-                    console.error("Erro ao enviar notificação para o Discord:", error);
+                if (isRequest) {
+                    description += `\n**Limite Configurado:** ${this.requestThresholdMs}ms`;
+
+                    // Logando TODOS os steps da requisição
+                    this.steps.forEach(s => {
+                        discordMessageEmbeds.push({
+                            title: `Step: ${s.stepName}`,
+                            description: `Duração: ${s.durationMs}ms (Limite: ${s.stepThresholdMs}ms)`,
+                            inline: false
+                        });
+                    });
+
+                } else if (step) {
+                    description += `\n**Passo:** ${step.stepName}`;
+                    description += `\n**Limite Configurado:** ${step.stepThresholdMs}ms`;
+
+                    discordMessageEmbeds.push({
+                        title: `Step: ${step.stepName}`,
+                        description: `Duração: ${step.durationMs}ms (Limite: ${step.stepThresholdMs}ms)`,
+                        inline: false
+                    });
                 }
+
+                // Definir cor com base no tempo
+                let color = constants.discordColors.green; // Rápido
+                if (timeInMilis > 2 * this.requestThresholdMs) {
+                    color = constants.discordColors.red; // Muito lento
+                } else if (timeInMilis > this.requestThresholdMs) {
+                    color = constants.discordColors.yellow; // Médio
+                }
+
+                return discordService.sendDiscord(
+                    title,
+                    description,
+                    discordMessageEmbeds,
+                    [constants.defaultAppDiscordErrorsWebhookUrl],
+                    color
+                ).catch(error => console.error("Erro ao enviar notificação ao Discord:", error));
             }
         };
     }
