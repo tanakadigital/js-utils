@@ -1,5 +1,3 @@
-import {CloudTasksClient} from '@google-cloud/tasks';
-
 import {BadRequestError} from '../errors/index.js';
 import {constants} from "../utils/index.js";
 import {discordService} from "../discord/index.js";
@@ -38,7 +36,8 @@ export const cloudTaskUtils = {
      * @returns {Promise<object>} Resposta do CloudTasksClient.createTask().
      */
 
-    async scheduleTask(queueName,
+    async scheduleTask(client,
+                       queueName,
                        taskHttpRequest = {
                            httpMethod: 'POST',
                            url: '',
@@ -88,7 +87,6 @@ export const cloudTaskUtils = {
                 task.scheduleTime = scheduleTime;
             }
 
-            const client = new CloudTasksClient();
             const [response] = await client.createTask({
                 parent,
                 task: task
