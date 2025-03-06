@@ -1,5 +1,5 @@
-import {constants, stringUtils} from "../utils/index.js";
-import {discordColors, discordService} from "../discord/index.js";
+import { constants, stringUtils } from "../utils/index.js";
+import { discordColors, discordService } from "../discord/index.js";
 
 export const profiler = {
     createProfiler(processName, requestThresholdMs = 1000) {
@@ -9,6 +9,7 @@ export const profiler = {
             startTime: new Date(),
             requestThresholdMs,
             steps: [],
+            hasSlowSteps: false, // Flag para indicar se algum step foi lento
 
             /**
              * Inicia um novo passo no profiler.
@@ -23,12 +24,12 @@ export const profiler = {
                     startTime: new Date(),
                     endTime: null,
                     durationMs: null,
-                    stepThresholdMs // Tempo mínimo antes de notificar
+                    stepThresholdMs, // Tempo mínimo antes de notificar
                 });
             },
 
             /**
-             * Finaliza um passo e verifica se precisa notificar o Discord.
+             * Finaliza um passo e marca se precisar notificar no finishProcess.
              * @param {string} stepName - Nome do passo a ser finalizado
              */
             finishStep(stepName) {
@@ -37,38 +38,22 @@ export const profiler = {
                     step.endTime = new Date();
                     step.durationMs = step.endTime.getTime() - step.startTime.getTime();
 
-                    // 🚨 Se o tempo do step ultrapassar o mínimo, notificar
-                    if (step.stepThresholdMs !== null && step.durationMs > step.stepThresholdMs) {
-                        this.notifyDiscord(step.durationMs, step, false)
-                            .catch(error => console.error("Erro ao notificar Discord para step:", step.stepName, error));
-                    }
-                } else {
-                    // 🚨 Notificar se um step nunca foi finalizado corretamente
-                    const unfinishedSteps = this.steps.filter(s => !s.endTime);
-                    if (unfinishedSteps.length > 0) {
-                        unfinishedSteps.forEach(unfinishedStep => {
-                            this.notifyDiscord(this.requestThresholdMs, unfinishedStep, false)
-                                .catch(error => console.error("Erro ao notificar Discord para step não finalizado:", unfinishedStep.stepName, error));
-                        });
+                    // 🚨 Se o step foi lento, marcamos para notificação no finishProcess
+                    if (step.durationMs > step.stepThresholdMs) {
+                        this.hasSlowSteps = true;
                     }
                 }
             },
 
-
             /**
-             * Finaliza o profiler e verifica se a requisição inteira deve ser notificada.
+             * Finaliza o profiler e verifica se precisa notificar o Discord.
              */
             finishProcess() {
-                if (!this.endTime) {  // Se o profiler nunca foi finalizado corretamente
-                    this.notifyDiscord(this.requestThresholdMs, null, true)
-                        .catch(error => console.error("Erro ao notificar Discord sobre processo não encerrado:", this.processName, error));
-                }
-
                 this.endTime = new Date();
                 this.totalDurationMs = this.endTime.getTime() - this.startTime.getTime();
 
-                // 🚨 Se a requisição ultrapassou o limite definido, notificar com TODOS os steps
-                if (this.totalDurationMs > this.requestThresholdMs) {
+                // 🚨 Verificar se o processo ou algum step foi lento
+                if (this.totalDurationMs > this.requestThresholdMs || this.hasSlowSteps) {
                     this.notifyDiscord(this.totalDurationMs, null, true)
                         .catch(error => console.error("Erro ao notificar Discord para requisição:", this.processName, error));
                 }
