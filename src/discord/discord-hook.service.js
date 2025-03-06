@@ -1,6 +1,6 @@
-import { constants } from "../utils/index.js";
+import {constants} from "../utils/index.js";
 
-import { fetchService } from "./fetch.service.js";
+import {fetchService} from "./fetch.service.js";
 
 export const discordColors = {
     red: 0xff0000,
@@ -26,7 +26,7 @@ export const discordService = {
      * @param {string[]} channelUrls - Lista de Webhooks do Discord (obrigatório).
      * @param {number} [color=discordColors.grey] - Cor do embed no formato hexadecimal (ex: discordColors.red).
      */
-    async sendDiscord(title, shortDescription, embedFields = [], channelUrls, color = discordColors.grey) {
+    async sendDiscord(title, shortDescription, embedFields, channelUrls, color = discordColors.grey) {
         if (!Array.isArray(channelUrls) || channelUrls.length === 0) {
             console.warn("⚠️ DiscordService.sendDiscord chamado sem channelUrls. Nenhuma mensagem enviada.");
             return;
@@ -71,8 +71,8 @@ export const discordService = {
             fetchService
                 .safeFetch(channelUrl, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ embeds: [embed] }),
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({embeds: [embed]}),
                 })
                 .then((response) => {
                     if (!response.ok) {
@@ -90,7 +90,7 @@ export const discordService = {
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
      * @param {string[]} [channelUrls=[constants.defaultAppDiscordWebhookUrl]] - Webhook de destino
      */
-    async sendApplicationDiscord(title, shortDescription, embedFields = [], channelUrls = [constants.defaultAppDiscordWebhookUrl]) {
+    async sendApplicationDiscord(title, shortDescription, embedFields, channelUrls = [constants.defaultAppDiscordWebhookUrl]) {
         let color = discordColors.red; // Produção (vermelho por padrão)
 
         if (process.env.NODE_ENV === "development") {
