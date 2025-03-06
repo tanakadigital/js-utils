@@ -96,6 +96,10 @@ export const cloudTaskUtils = {
         } catch (e) {
             const embedFields = [
                 {
+                    name: "appName",
+                    value: constants.appName,
+                },
+                {
                     name: "queueName",
                     value: queueName,
                 },
