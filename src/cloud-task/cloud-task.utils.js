@@ -24,7 +24,6 @@ export const cloudTaskUtils = {
      *       seconds: Math.floor(Date.now() / 1000) + 60
      *     }
      *   });
-     * @param {object} client - nome da fila no cloudtask.
      * @param {string} queueName - nome da fila no cloudtask.
      * @param {object} taskHttpRequest - Objeto que deve conter os dados necessários para a tarefa.
      * @param {object} scheduleTime - Objeto que deve conter os dados necessários para a tarefa.
@@ -39,8 +38,7 @@ export const cloudTaskUtils = {
      * @returns {Promise<object>} Resposta do CloudTasksClient.createTask().
      */
 
-    async scheduleTask(client,
-                       queueName,
+    async scheduleTask(queueName,
                        taskHttpRequest = {
                            httpMethod: 'POST',
                            url: '',
@@ -90,6 +88,7 @@ export const cloudTaskUtils = {
                 task.scheduleTime = scheduleTime;
             }
 
+            const client = new CloudTasksClient();
             const [response] = await client.createTask({
                 parent,
                 task: task
@@ -98,10 +97,6 @@ export const cloudTaskUtils = {
             return response;
         } catch (e) {
             const embedFields = [
-                {
-                    name: "appName",
-                    value: constants.appName,
-                },
                 {
                     name: "queueName",
                     value: queueName,
@@ -120,7 +115,10 @@ export const cloudTaskUtils = {
                 "Erro ao agendar tarefa no Cloud Tasks!!!",
                 "Erro: " + e.message,
                 embedFields,
-                [constants.defaultAppDiscordCloudTaskErrorsWebhookUrl]
+                [
+                    constants.defaultAppDiscordWebhookUrl,
+                    constants.defaultAppDiscordCloudTaskErrorsWebhookUrl
+                ]
             );
 
             throw e;

@@ -42,13 +42,28 @@ export const profiler = {
                         this.notifyDiscord(step.durationMs, step, false)
                             .catch(error => console.error("Erro ao notificar Discord para step:", step.stepName, error));
                     }
+                } else {
+                    // 🚨 Notificar se um step nunca foi finalizado corretamente
+                    const unfinishedSteps = this.steps.filter(s => !s.endTime);
+                    if (unfinishedSteps.length > 0) {
+                        unfinishedSteps.forEach(unfinishedStep => {
+                            this.notifyDiscord(this.requestThresholdMs, unfinishedStep, false)
+                                .catch(error => console.error("Erro ao notificar Discord para step não finalizado:", unfinishedStep.stepName, error));
+                        });
+                    }
                 }
             },
+
 
             /**
              * Finaliza o profiler e verifica se a requisição inteira deve ser notificada.
              */
             finishProcess() {
+                if (!this.endTime) {  // Se o profiler nunca foi finalizado corretamente
+                    this.notifyDiscord(this.requestThresholdMs, null, true)
+                        .catch(error => console.error("Erro ao notificar Discord sobre processo não encerrado:", this.processName, error));
+                }
+
                 this.endTime = new Date();
                 this.totalDurationMs = this.endTime.getTime() - this.startTime.getTime();
 
