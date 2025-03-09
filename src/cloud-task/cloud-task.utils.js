@@ -22,6 +22,7 @@ export const cloudTaskUtils = {
      *       seconds: Math.floor(Date.now() / 1000) + 60
      *     }
      *   });
+     * @param {object} client - nome da fila no cloudtask.
      * @param {string} queueName - nome da fila no cloudtask.
      * @param {object} taskHttpRequest - Objeto que deve conter os dados necessários para a tarefa.
      * @param {object} scheduleTime - Objeto que deve conter os dados necessários para a tarefa.
@@ -96,20 +97,20 @@ export const cloudTaskUtils = {
         } catch (e) {
             const embedFields = [
                 {
-                    name: "appName",
-                    value: constants.appName,
+                    title: "appName",
+                    description: constants.appName,
                 },
                 {
-                    name: "queueName",
-                    value: queueName,
+                    title: "queueName",
+                    description: queueName,
                 },
                 {
-                    name: "taskHttpRequest",
-                    value: JSON.stringify(taskHttpRequest),
+                    title: "taskHttpRequest",
+                    description: JSON.stringify(taskHttpRequest),
                 },
                 {
-                    name: "scheduleTime",
-                    value: JSON.stringify(scheduleTime),
+                    title: "scheduleTime",
+                    description: JSON.stringify(scheduleTime),
                 }
             ];
 
