@@ -1,5 +1,5 @@
-import { constants, stringUtils } from "../utils/index.js";
-import { discordColors, discordService } from "../discord/index.js";
+import {constants, stringUtils} from "../utils/index.js";
+import {discordColors, discordService} from "../discord/index.js";
 
 export const profiler = {
     createProfiler(processName, requestThresholdMs = 1000) {
@@ -9,6 +9,7 @@ export const profiler = {
             startTime: new Date(),
             requestThresholdMs,
             steps: [],
+            methodsCalled: [],
             hasSlowSteps: false, // Flag para indicar se algum step foi lento
 
             /**
@@ -26,6 +27,10 @@ export const profiler = {
                     durationMs: null,
                     stepThresholdMs, // Tempo mínimo antes de notificar
                 });
+            },
+
+            registerCallMethod(stepName) {
+                this.methodsCalled.push(stepName);
             },
 
             /**
@@ -67,6 +72,7 @@ export const profiler = {
                     startTime: this.startTime,
                     endTime: this.endTime,
                     steps: this.steps,
+                    methodsCalled: this.methodsCalled
                 };
             },
 
