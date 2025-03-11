@@ -75,7 +75,6 @@ const accessSecret = async (secretName) => {
             `Erro ao buscar o segredo "${secretName}":`,
             "e.message: " + error.message,
             null,
-            [constants.defaultAppDiscordCloudTaskErrorsWebhookUrl]
         );
         return null;
     }
