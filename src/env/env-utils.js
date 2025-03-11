@@ -7,7 +7,6 @@ import {SecretManagerServiceClient} from '@google-cloud/secret-manager';
 
 import {ServerError} from '../errors/index.js';
 import {discordService} from "../discord/index.js";
-import {constants} from "../utils/index.js";
 
 let secretManagerClient = null;
 const envCache = {};
@@ -48,7 +47,9 @@ const accessSecret = async (secretName) => {
     }
 
     if (!secretManagerClient) {
-        secretManagerClient = new SecretManagerServiceClient();
+        secretManagerClient = new SecretManagerServiceClient({
+            keyFilename: credentialsPath,
+        });
     }
 
     const absolutePath = path.isAbsolute(credentialsPath)
