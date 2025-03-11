@@ -9,7 +9,7 @@ import {ServerError} from '../errors/index.js';
 import {discordService} from "../discord/index.js";
 import {constants} from "../utils/index.js";
 
-const secretManagerClient = new SecretManagerServiceClient();
+let secretManagerClient = null;
 const envCache = {};
 
 dotenv.config();
@@ -45,6 +45,10 @@ const accessSecret = async (secretName) => {
     const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
     if (!credentialsPath) {
         throw new ServerError('GOOGLE_APPLICATION_CREDENTIALS não está definido.');
+    }
+
+    if (!secretManagerClient) {
+        secretManagerClient = new SecretManagerServiceClient();
     }
 
     const absolutePath = path.isAbsolute(credentialsPath)
