@@ -13,6 +13,7 @@ export const constants = {
     defaultAppDiscordErrorsWebhookUrl: "https://discord.com/api/webhooks/1342627488466997330/J-kkv4lmnQVEYhWQtJ9sQafBxwiOTDOMopunWKlFui69hsexzY_ipW8yT5bcdaT5SCZ6",
     defaultAppDiscordCloudTaskErrorsWebhookUrl: "https://discord.com/api/webhooks/1345044619649617960/uGW4y7v2DQEsXYAJBGv0qoqMTycXzvq0im1o5QbUn33gR3dmvuJKkHj1Y27eb2cQqHd8",
     defaultAppProfilerAlertsWebhookUrl: "https://discord.com/api/webhooks/1346162138439356447/QH7fITLelZP7EFcJH-3JOASb_4Ej4lyLOn7q5iQnqlhaqxhZTvMB6wzwdPyogvtAxbwM",
+    defaultDiscordErrorsWebhookUrl: "https://discord.com/api/webhooks/1349736238466338948/ZUAJk5xH6hbmYwTyGgZqotSMVMnSZymEIGmMxP0pCssOv5Bdc60aXz4uYcrIPjFrK1vj",
 
     init() {
         if (!this._isInitialized) {

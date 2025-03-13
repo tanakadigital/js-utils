@@ -68,6 +68,7 @@ export const discordService = {
         }
 
         for (const channelUrl of channelUrls) {
+            let isError = false;
             fetchService
                 .safeFetch(channelUrl, {
                     method: "POST",
@@ -76,10 +77,38 @@ export const discordService = {
                 })
                 .then((response) => {
                     if (!response.ok) {
+                        isError = true;
                         console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.status}`);
                     }
                 })
-                .catch((error) => console.error("❌ Erro ao enviar notificação Discord:", error));
+                .catch((error) => {
+                    isError = true;
+                    console.error("❌ Erro ao enviar notificação Discord:", error);
+                })
+                .finally(async () => {
+                    if (isError) {
+
+                        const errorEmbed = [
+                            {
+                                title: "Erro ao enviar notificação Discord",
+                                description: `**Canal:** ${channelUrl}`,
+                                fields: [
+                                    {name: "Título", value: titleLimited},
+                                    {name: "Descrição", value: shortDescriptionLimited},
+                                    {name: "Cor", value: color.toString(16)},
+                                    {name: "Embed Fields", value: JSON.stringify(embedFields)},
+                                ]
+                            }
+                        ];
+
+                        await fetchService
+                            .safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({embeds: [errorEmbed]}),
+                            });
+                    }
+                });
         }
     },
 

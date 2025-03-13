@@ -123,8 +123,6 @@ export const cloudTaskUtils = {
                     constants.defaultAppDiscordCloudTaskErrorsWebhookUrl
                 ]
             );
-
-            throw e;
         }
     }
 };
