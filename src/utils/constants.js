@@ -8,7 +8,7 @@ export const constants = {
     _isInitialized: false,
 
     appName: "Not found",
-    projectId: process.env.GCP_PROJECT_ID,
+    projectId: process.env.GCP_PROJECT_ID || process.env.PROJECT_ID,
     defaultAppDiscordWebhookUrl: "https://discord.com/api/webhooks/1341162438187417681/rt23Yv3afC3ZpGw9LH5y0i8VVV_o0zwHeuRXRvAQIt1znFxwPTm1cDa8Rzczr4cwN6jj",
     defaultAppDiscordErrorsWebhookUrl: "https://discord.com/api/webhooks/1342627488466997330/J-kkv4lmnQVEYhWQtJ9sQafBxwiOTDOMopunWKlFui69hsexzY_ipW8yT5bcdaT5SCZ6",
     defaultAppDiscordCloudTaskErrorsWebhookUrl: "https://discord.com/api/webhooks/1345044619649617960/uGW4y7v2DQEsXYAJBGv0qoqMTycXzvq0im1o5QbUn33gR3dmvuJKkHj1Y27eb2cQqHd8",
@@ -20,8 +20,10 @@ export const constants = {
                 throw new BadRequestError("App name not found");
             }
 
-            if (!process.env.GCP_PROJECT_ID) {
-                throw new BadRequestError("GCP Project ID not found");
+            if (process.env.GCP_PROJECT_ID) {
+                this.projectId = process.env.GCP_PROJECT_ID;
+            } else if (process.env.PROJECT_ID) {
+                this.projectId = process.env.PROJECT_ID;
             }
 
             if (process.env.DISCORD_DEFAULT_WEBHOOK_URL) {
@@ -42,8 +44,6 @@ export const constants = {
 
 
             this.appName = process.env.APP_NAME;
-            this.projectId = process.env.GCP_PROJECT_ID;
-
 
             this._isInitialized = true;
         }
