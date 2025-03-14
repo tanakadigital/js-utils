@@ -2,21 +2,20 @@ import {constants, stringUtils} from "../utils/index.js";
 import {discordColors, discordService} from "../discord/index.js";
 
 export const profiler = {
-    createProfiler(processName, requestThresholdMs = 1000) {
+    requestThresholdMs: 1000, // Definido como uma propriedade fixa do objeto
+
+    createProfiler(processName) {
         return {
             uuid: stringUtils.randomUUID(),
             processName,
             startTime: new Date(),
-            requestThresholdMs,
             steps: [],
             methodsCalled: [],
             hasSlowSteps: false, // Flag para indicar se algum step foi lento
+            requestThresholdMs: profiler.requestThresholdMs,
 
             /**
              * Inicia um novo passo no profiler.
-             * @param {string} stepName - Nome do passo
-             * @param {string} description - Descrição opcional do passo
-             * @param {number|null} stepThresholdMs - Tempo mínimo antes de notificar (padrão: 50ms)
              */
             startStep(stepName, description = "", stepThresholdMs = 50) {
                 this.steps.push({
@@ -35,7 +34,6 @@ export const profiler = {
 
             /**
              * Finaliza um passo e marca se precisar notificar no finishProcess.
-             * @param {string} stepName - Nome do passo a ser finalizado
              */
             finishStep(stepName) {
                 const step = this.steps.find(s => s.stepName === stepName && !s.endTime);
@@ -43,11 +41,18 @@ export const profiler = {
                     step.endTime = new Date();
                     step.durationMs = step.endTime.getTime() - step.startTime.getTime();
 
-                    // 🚨 Se o step foi lento, marcamos para notificação no finishProcess
                     if (step.durationMs > step.stepThresholdMs) {
                         this.hasSlowSteps = true;
                     }
                 }
+            },
+
+            /**
+             * Obtém o threshold dinâmico com base na soma de todos os steps.
+             */
+            getDynamicThreshold() {
+                const totalStepThreshold = this.steps.reduce((sum, step) => sum + step.stepThresholdMs, 0);
+                return Math.max(this.requestThresholdMs, totalStepThreshold);
             },
 
             /**
@@ -57,8 +62,9 @@ export const profiler = {
                 this.endTime = new Date();
                 this.totalDurationMs = this.endTime.getTime() - this.startTime.getTime();
 
-                // 🚨 Verificar se o processo ou algum step foi lento
-                if (this.totalDurationMs > this.requestThresholdMs || this.hasSlowSteps) {
+                const dynamicThreshold = this.getDynamicThreshold();
+
+                if (this.totalDurationMs > dynamicThreshold || this.hasSlowSteps) {
                     this.notifyDiscord(this.totalDurationMs, null, true)
                         .catch(error => console.error("Erro ao notificar Discord para requisição:", this.processName, error));
                 }
@@ -78,9 +84,6 @@ export const profiler = {
 
             /**
              * Envia uma notificação ao Discord.
-             * @param {number} timeInMilis - Tempo de execução
-             * @param {object|null} step - Step (se for notificação individual de step)
-             * @param {boolean} isRequest - Se é para notificar a requisição inteira
              */
             async notifyDiscord(timeInMilis, step = null, isRequest = false) {
                 const traceId = stringUtils.randomUUID();
@@ -99,9 +102,7 @@ export const profiler = {
                 const discordMessageEmbeds = [];
 
                 if (isRequest) {
-                    description += `\n**Limite Configurado:** ${this.requestThresholdMs}ms`;
-
-                    // Logando TODOS os steps da requisição
+                    description += `\n**Limite Configurado:** ${this.getDynamicThreshold()}ms`;
                     this.steps.forEach(s => {
                         discordMessageEmbeds.push({
                             title: `Step: ${s.stepName}`,
@@ -109,7 +110,6 @@ export const profiler = {
                             inline: false
                         });
                     });
-
                 } else if (step) {
                     description += `\n**Passo:** ${step.stepName}`;
                     description += `\n**Limite Configurado:** ${step.stepThresholdMs}ms`;
@@ -121,12 +121,11 @@ export const profiler = {
                     });
                 }
 
-                // Definir cor com base no tempo
-                let color = discordColors.green; // Rápido
-                if (timeInMilis > 2 * this.requestThresholdMs) {
-                    color = discordColors.red; // Muito lento
-                } else if (timeInMilis > this.requestThresholdMs) {
-                    color = discordColors.yellow; // Médio
+                let color = discordColors.green;
+                if (timeInMilis > 2 * this.getDynamicThreshold()) {
+                    color = discordColors.red;
+                } else if (timeInMilis > this.getDynamicThreshold()) {
+                    color = discordColors.yellow;
                 }
 
                 return discordService.sendDiscord(
@@ -136,6 +135,13 @@ export const profiler = {
                     [constants.defaultAppProfilerAlertsWebhookUrl],
                     color
                 ).catch(error => console.error("Erro ao enviar notificação ao Discord:", error));
+            },
+
+            /**
+             * Método para editar o requestThresholdMs
+             */
+            setRequestThresholdMs(newThresholdMs) {
+                this.requestThresholdMs = newThresholdMs;
             }
         };
     }
