@@ -101,12 +101,17 @@ export const discordService = {
                             }
                         ];
 
-                        await fetchService
-                            .safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
-                                method: "POST",
-                                headers: {"Content-Type": "application/json"},
-                                body: JSON.stringify({embeds: [errorEmbed]}),
-                            });
+                        try {
+
+                            await fetchService
+                                .safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
+                                    method: "POST",
+                                    headers: {"Content-Type": "application/json"},
+                                    body: JSON.stringify({embeds: [errorEmbed]}),
+                                });
+                        } catch (e) {
+                            console.error("❌ Erro ao enviar notificação de erro Discord:", e);
+                        }
                     }
                 });
         }
