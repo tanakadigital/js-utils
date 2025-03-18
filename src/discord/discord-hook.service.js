@@ -103,12 +103,19 @@ export const discordService = {
 
                         try {
 
-                            await fetchService
+                            const ret = await fetchService
                                 .safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
                                     method: "POST",
                                     headers: {"Content-Type": "application/json"},
                                     body: JSON.stringify({embeds: [errorEmbed]}),
                                 });
+
+                            if (!ret?.ok) {
+                                console.log("❌ Falha ao enviar notificação de erro Discord:", ret);
+                            } else {
+                                console.log("✅ Notificação de erro Discord enviada com sucesso:", ret);
+                            }
+
                         } catch (e) {
                             console.error("❌ Erro ao enviar notificação de erro Discord:", e);
                         }

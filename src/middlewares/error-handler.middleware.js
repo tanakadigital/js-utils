@@ -15,7 +15,7 @@ export const errorHandler = {
 **TraceId**: ${traceId}
 `.trim();
 
-        const appName = err.appName || constants.appName;
+        const appName = err.appName !== "Not found" ? err.appName : constants.appName;
 
         // Monta detalhes do erro
         const discordMessageEmbeds = [
