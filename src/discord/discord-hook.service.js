@@ -1,6 +1,6 @@
-import {constants} from "../utils/index.js";
+import { constants } from "../utils/index.js";
 
-import {fetchService} from "./fetch.service.js";
+import { fetchService } from "./fetch.service.js";
 
 export const discordColors = {
     red: 0xff0000,
@@ -45,7 +45,7 @@ export const discordService = {
         const embed = {
             title: titleLimited,
             description: shortDescriptionLimited,
-            color, // Cor agora sempre definida corretamente
+            color,
             fields: [],
         };
 
@@ -69,16 +69,19 @@ export const discordService = {
 
         for (const channelUrl of channelUrls) {
             let isError = false;
+
             fetchService
                 .safeFetch(channelUrl, {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({embeds: [embed]}),
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed] }),
                 })
                 .then((response) => {
                     if (!response.ok) {
                         isError = true;
-                        console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.status}`);
+                        console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.statusCode}`);
+                        // Exibe também o corpo retornado pelo Discord, para ajudar no diagnóstico
+                        console.error("📝 Corpo da resposta:", response.responseBody);
                     }
                 })
                 .catch((error) => {
@@ -87,37 +90,29 @@ export const discordService = {
                 })
                 .finally(async () => {
                     if (isError) {
-
                         const errorEmbed = [
                             {
                                 title: "Erro ao enviar notificação Discord",
                                 description: `**Canal:** ${channelUrl}`,
                                 fields: [
-                                    {name: "Título", value: titleLimited},
-                                    {name: "Descrição", value: shortDescriptionLimited},
-                                    {name: "Cor", value: color.toString(16)},
-                                    {name: "Embed Fields", value: JSON.stringify(embedFields)},
-                                ]
-                            }
+                                    { name: "Título", value: titleLimited },
+                                    { name: "Descrição", value: shortDescriptionLimited },
+                                    { name: "Cor", value: color.toString(16) },
+                                    { name: "Embed Fields", value: JSON.stringify(embedFields) },
+                                ],
+                            },
                         ];
 
-                        try {
+                        // Como 'safeFetch' não lança exceções, basta checar o retorno
+                        const ret = await fetchService.safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ embeds: [errorEmbed] }),
+                        });
 
-                            const ret = await fetchService
-                                .safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
-                                    method: "POST",
-                                    headers: {"Content-Type": "application/json"},
-                                    body: JSON.stringify({embeds: [errorEmbed]}),
-                                });
-
-                            if (!ret?.ok) {
-                                console.log("❌ Falha ao enviar notificação de erro Discord:", ret);
-                            } else {
-                                console.log("✅ Notificação de erro Discord enviada com sucesso:", ret);
-                            }
-
-                        } catch (e) {
-                            console.error("❌ Erro ao enviar notificação de erro Discord:", e);
+                        if (!ret.ok) {
+                            console.error("❌ Falha ao enviar notificação de erro Discord:", ret.statusCode);
+                            console.error("📝 Corpo da resposta do erro:", ret.responseBody);
                         }
                     }
                 });
@@ -152,10 +147,17 @@ export const discordService = {
      * @param {string[]} [channelUrls=[constants.defaultAppProfilerAlertsWebhookUrl]] - Webhook de destino.
      * @param {number} [customColor=null] - Cor customizada (se passar, ignora a lógica automática).
      */
-    async sendProfilerDiscord(title, shortDescription, embedFields = [], durationMs, channelUrls = [constants.defaultAppProfilerAlertsWebhookUrl], customColor = null) {
+    async sendProfilerDiscord(
+        title,
+        shortDescription,
+        embedFields = [],
+        durationMs,
+        channelUrls = [constants.defaultAppProfilerAlertsWebhookUrl],
+        customColor = null
+    ) {
         let color = customColor || discordColors.green; // Se não passar cor customizada, usa regra automática
 
-        if (!customColor) { // Só aplica regras de cor se não foi passada uma cor customizada
+        if (!customColor) {
             if (durationMs > 500 && durationMs <= 1000) {
                 color = discordColors.yellow; // Médio = amarelo
             } else if (durationMs > 1000) {
@@ -164,5 +166,5 @@ export const discordService = {
         }
 
         return this.sendDiscord(title, shortDescription, embedFields, channelUrls, color);
-    }
+    },
 };
