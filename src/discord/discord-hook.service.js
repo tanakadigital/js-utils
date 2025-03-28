@@ -1,4 +1,8 @@
-import { constants } from "../utils/index.js";
+import {
+    defaultAppDiscordWebhookUrl,
+    defaultAppProfilerAlertsWebhookUrl,
+    defaultDiscordErrorsWebhookUrl
+} from "../utils/constants.js";
 
 import { fetchService } from "./fetch.service.js";
 
@@ -104,7 +108,7 @@ export const discordService = {
                         ];
 
                         // Como 'safeFetch' não lança exceções, basta checar o retorno
-                        const ret = await fetchService.safeFetch(constants.defaultDiscordErrorsWebhookUrl, {
+                        const ret = await fetchService.safeFetch(defaultDiscordErrorsWebhookUrl, {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ embeds: [errorEmbed] }),
@@ -124,9 +128,9 @@ export const discordService = {
      * @param {string} title
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
-     * @param {string[]} [channelUrls=[constants.defaultAppDiscordWebhookUrl]] - Webhook de destino
+     * @param {string[]} [channelUrls=[defaultAppDiscordWebhookUrl]] - Webhook de destino
      */
-    async sendApplicationDiscord(title, shortDescription, embedFields, channelUrls = [constants.defaultAppDiscordWebhookUrl]) {
+    async sendApplicationDiscord(title, shortDescription, embedFields, channelUrls = [defaultAppDiscordWebhookUrl]) {
         let color = discordColors.red; // Produção (vermelho por padrão)
 
         if (process.env.NODE_ENV === "development") {
@@ -144,7 +148,7 @@ export const discordService = {
      * @param {string} shortDescription
      * @param {Array<{ title: string, description: string, inline?: boolean }>} [embedFields]
      * @param {number} durationMs - Tempo de execução do processo.
-     * @param {string[]} [channelUrls=[constants.defaultAppProfilerAlertsWebhookUrl]] - Webhook de destino.
+     * @param {string[]} [channelUrls=[defaultAppProfilerAlertsWebhookUrl]] - Webhook de destino.
      * @param {number} [customColor=null] - Cor customizada (se passar, ignora a lógica automática).
      */
     async sendProfilerDiscord(
@@ -152,7 +156,7 @@ export const discordService = {
         shortDescription,
         embedFields = [],
         durationMs,
-        channelUrls = [constants.defaultAppProfilerAlertsWebhookUrl],
+        channelUrls = [defaultAppProfilerAlertsWebhookUrl],
         customColor = null
     ) {
         let color = customColor || discordColors.green; // Se não passar cor customizada, usa regra automática

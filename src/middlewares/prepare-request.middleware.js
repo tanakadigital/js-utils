@@ -1,4 +1,5 @@
-import {constants, stringUtils} from "../utils/index.js";
+import {stringUtils} from "../utils/index.js";
+import {appName} from "../utils/constants.js";
 
 
 export const prepareRequest = {
@@ -29,7 +30,7 @@ export const prepareRequest = {
 
         req.requestInfo = requestInfo;
 
-        req.appName = constants.appName;
+        req.appName = appName;
 
         next();
     }

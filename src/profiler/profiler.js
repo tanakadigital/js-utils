@@ -1,5 +1,6 @@
-import {constants, stringUtils} from "../utils/index.js";
+import {stringUtils} from "../utils/index.js";
 import {discordColors, discordService} from "../discord/index.js";
+import {appName, defaultAppProfilerAlertsWebhookUrl} from "../utils/constants.js";
 
 export const profiler = {
     requestThresholdMs: 1000, // Definido como uma propriedade fixa do objeto
@@ -92,7 +93,7 @@ export const profiler = {
                     : `⚠️ PROCESSO LENTO DETECTADO ⚠️`;
 
                 let description = `
-**App Name:** ${constants.appName}
+**App Name:** ${appName}
 **Processo:** ${this.processName}
 **Duração:** ${timeInMilis}ms ⏳
 **TraceId:** ${traceId}
@@ -132,7 +133,7 @@ export const profiler = {
                     title,
                     description,
                     discordMessageEmbeds,
-                    [constants.defaultAppProfilerAlertsWebhookUrl],
+                    [defaultAppProfilerAlertsWebhookUrl],
                     color
                 ).catch(error => console.error("Erro ao enviar notificação ao Discord:", error));
             },

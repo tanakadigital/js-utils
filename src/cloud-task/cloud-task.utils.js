@@ -1,6 +1,11 @@
 import {BadRequestError} from '../errors/index.js';
-import {constants} from "../utils/index.js";
 import {discordService} from "../discord/index.js";
+import {
+    appName,
+    defaultAppDiscordCloudTaskErrorsWebhookUrl,
+    defaultAppDiscordWebhookUrl,
+    projectId
+} from "../utils/constants.js";
 
 export const cloudTaskUtils = {
 
@@ -77,7 +82,7 @@ export const cloudTaskUtils = {
                 );
             }
 
-            const parent = `projects/${constants.projectId}/locations/southamerica-east1/queues/${queueName}`;
+            const parent = `projects/${projectId}/locations/southamerica-east1/queues/${queueName}`;
 
             const task = {
                 httpRequest: taskHttpRequest,
@@ -98,7 +103,7 @@ export const cloudTaskUtils = {
             const embedFields = [
                 {
                     title: "appName",
-                    description: constants.appName,
+                    description: appName,
                 },
                 {
                     title: "queueName",
@@ -119,8 +124,8 @@ export const cloudTaskUtils = {
                 "Erro: " + e.message,
                 embedFields,
                 [
-                    constants.defaultAppDiscordWebhookUrl,
-                    constants.defaultAppDiscordCloudTaskErrorsWebhookUrl
+                    defaultAppDiscordWebhookUrl,
+                    defaultAppDiscordCloudTaskErrorsWebhookUrl
                 ]
             );
         }
