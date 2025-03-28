@@ -22,7 +22,7 @@ export class CustomError extends Error {
         super(message);
         this.name = this.constructor.name;
 
-        this.appName = appName || process.env.APP_NAME || 'Unknown';
+        this.appName = process.env.APP_NAME || 'Unknown';
         this.discordWebhookUrls.push(defaultAppDiscordWebhookUrl);
 
         // Propriedades adicionais
