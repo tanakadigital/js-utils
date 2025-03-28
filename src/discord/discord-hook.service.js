@@ -4,7 +4,7 @@ import {
     defaultDiscordErrorsWebhookUrl
 } from "../utils/constants.js";
 
-import { fetchService } from "./fetch.service.js";
+import {fetchService} from "./fetch.service.js";
 
 export const discordColors = {
     red: 0xff0000,
@@ -74,52 +74,50 @@ export const discordService = {
         for (const channelUrl of channelUrls) {
             let isError = false;
 
-            fetchService
-                .safeFetch(channelUrl, {
+            try {
+                const response = await fetchService.safeFetch(channelUrl, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ embeds: [embed] }),
-                })
-                .then((response) => {
-                    if (!response.ok) {
-                        isError = true;
-                        console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.statusCode}`);
-                        // Exibe também o corpo retornado pelo Discord, para ajudar no diagnóstico
-                        console.error("📝 Corpo da resposta:", response.responseBody);
-                    }
-                })
-                .catch((error) => {
-                    isError = true;
-                    console.error("❌ Erro ao enviar notificação Discord:", error);
-                })
-                .finally(async () => {
-                    if (isError) {
-                        const errorEmbed = [
-                            {
-                                title: "Erro ao enviar notificação Discord",
-                                description: `**Canal:** ${channelUrl}`,
-                                fields: [
-                                    { name: "Título", value: titleLimited },
-                                    { name: "Descrição", value: shortDescriptionLimited },
-                                    { name: "Cor", value: color.toString(16) },
-                                    { name: "Embed Fields", value: JSON.stringify(embedFields) },
-                                ],
-                            },
-                        ];
-
-                        // Como 'safeFetch' não lança exceções, basta checar o retorno
-                        const ret = await fetchService.safeFetch(defaultDiscordErrorsWebhookUrl, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ embeds: [errorEmbed] }),
-                        });
-
-                        if (!ret.ok) {
-                            console.error("❌ Falha ao enviar notificação de erro Discord:", ret.statusCode);
-                            console.error("📝 Corpo da resposta do erro:", ret.responseBody);
-                        }
-                    }
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({embeds: [embed]}),
                 });
+
+                if (!response.ok) {
+                    isError = true;
+                    console.error(`❌ Falha ao enviar webhook para: ${channelUrl}, Status: ${response.statusCode}`);
+                    // Exibe também o corpo retornado pelo Discord, para ajudar no diagnóstico
+                    console.error("📝 Corpo da resposta:", response.responseBody);
+                }
+            } catch (e) {
+                isError = true;
+                console.error("❌ Erro ao enviar notificação Discord:", e);
+            } finally {
+                if (isError) {
+                    const errorEmbed = [
+                        {
+                            title: "Erro ao enviar notificação Discord",
+                            description: `**Canal:** ${channelUrl}`,
+                            fields: [
+                                {name: "Título", value: titleLimited},
+                                {name: "Descrição", value: shortDescriptionLimited},
+                                {name: "Cor", value: color.toString(16)},
+                                {name: "Embed Fields", value: JSON.stringify(embedFields)},
+                            ],
+                        },
+                    ];
+
+                    // Como 'safeFetch' não lança exceções, basta checar o retorno
+                    const ret = await fetchService.safeFetch(defaultDiscordErrorsWebhookUrl, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({embeds: [errorEmbed]}),
+                    });
+
+                    if (!ret.ok) {
+                        console.error("❌ Falha ao enviar notificação de erro Discord:", ret.statusCode);
+                        console.error("📝 Corpo da resposta do erro:", ret.responseBody);
+                    }
+                }
+            }
         }
     },
 
