@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 
 import {ServerError} from '../errors/index.js';
+import {discordService} from "../discord/index.js";
 
 const envCache = {};
 
@@ -22,6 +23,27 @@ export const envUtils = {
         }
 
         if (throwsOnEmpty) {
+
+            const embedFields = [
+                {
+                    name: "AppName",
+                    value: process.env.APP_NAME || "Não encontrado"
+                }, {
+                    name: "Variável de ambiente",
+                    value: variableName
+                },
+                {
+                    name: "Valor",
+                    value: "Não encontrado"
+                }
+            ];
+
+            await discordService.sendApplicationDiscord(
+                `Variável de ambiente "${variableName}" não encontrada.`,
+                "Aplicacao será encerrada.",
+                embedFields
+            );
+
             throw new ServerError(`Variável de ambiente "${variableName}" não encontrada.`);
         }
 
